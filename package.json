@@ -1,0 +1,45 @@
+{
+	"name": "count_of_money",
+	"version": "0.0.0",
+	"description": "",
+	"release": {
+		"branches": [
+			"main"
+		],
+		"plugins": [
+			"@semantic-release/commit-analyzer",
+			"@semantic-release/release-notes-generator",
+			"@semantic-release/github",
+			[
+				"@semantic-release/git",
+				{
+					"assets": [
+						"package.json"
+					],
+					"message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+				}
+			]
+		]
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^18.4.1",
+		"@commitlint/config-conventional": "^18.4.0",
+		"@semantic-release/git": "^10.0.1",
+		"@semantic-release/github": "^9.2.3",
+		"husky": "^8.0.3",
+		"semantic-release": "^22.0.7"
+	},
+	"scripts": {
+		"setup": "npm i && npx husky install"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ASparton/count-of-money.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/ASparton/count-of-money/issues"
+	},
+	"homepage": "https://github.com/ASparton/count-of-money#readme"
+}

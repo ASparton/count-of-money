@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  back:
+    build: ./back
+    container_name: back
+
+    restart: always
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+
+    ports:
+      - ${BACKEND_PORT}:3000
+
+    volumes:
+      - ./back/src:/app/src
+      - ./back/prisma:/app/prisma
+
+    depends_on:
+        - database
+
+  adminer:
+    image: adminer
+    container_name: adminer
+
+    restart: always
+
+    environment:
+      ADMINER_DESIGN: ${ADMINER_DESIGN}
+
+    ports:
+      - ${ADMINER_PORT}:8080
+
+    links:
+      - database:db
+
+  database:
+    image: mysql:8.0
+    container_name: database
+
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: count_of_money
+
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+    volumes:
+      - database-data:/var/lib/mysql
+
+volumes:
+  database-data:
