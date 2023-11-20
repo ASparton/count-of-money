@@ -3,9 +3,10 @@ version: "3.9"
 services:
   back:
     build: ./back
-    container_name: back
 
+    container_name: back
     restart: always
+
     environment:
       DATABASE_URL: ${DATABASE_URL}
 
@@ -15,15 +16,16 @@ services:
     volumes:
       - ./back/src:/app/src
       - ./back/prisma:/app/prisma
+      - ./back/package.json:/app/package.json
 
     depends_on:
         - database
 
   test:
     build: ./back
-    container_name: test
 
-    entrypoint: npm run test
+    container_name: test
+    entrypoint: /app/test-entrypoint.sh
 
     environment:
       DATABASE_URL: ${TEST_DATABASE_URL}
@@ -31,6 +33,7 @@ services:
     volumes:
       - ./back/src:/app/src
       - ./back/prisma:/app/prisma
+      - ./back/package.json:/app/package.json
 
     depends_on:
         - database
