@@ -7,6 +7,8 @@
     "esModuleInterop": true,
     "paths": {
       "@controllers/*": ["./src/controllers/*"],
-      "#types/*": ["./src/types/*"]
+      "~lucia": ["./src/lucia.ts"],
+      "#types/*": ["./src/types/*"],
+      "@dto/*": ["./src/types/dto/*"]
   }
 }
