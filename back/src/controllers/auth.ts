@@ -4,6 +4,7 @@ import { auth } from "~lucia";
 
 import LoginDTO from "@dto/auth/LoginDTO";
 import RegisterDTO from "@dto/auth/RegisterDTO";
+import HttpStatusCode from "#types/HttpStatusCode";
 
 const controller = express.Router();
 
@@ -11,7 +12,7 @@ controller.post("/login", async (req, res) => {
 	const body = LoginDTO.safeParse(req.body);
 
 	if (!body.success) {
-		return;
+		return res.send(body.error.issues);
 	}
 
 	const key = await auth.useKey("email", body.data.email, body.data.password);
@@ -24,8 +25,12 @@ controller.post("/login", async (req, res) => {
 	const handler = auth.handleRequest(req, res);
 	handler.setSession(session);
 
-	return res.status(200).send({
-		success: true,
+	return res.status(HttpStatusCode.OK_200).send({
+		data: {
+			id: key.userId,
+			email: body.data.email,
+			token: session.sessionId,
+		},
 	});
 });
 
@@ -33,7 +38,7 @@ controller.post("/register", async (req, res) => {
 	const body = RegisterDTO.safeParse(req.body);
 
 	if (!body.success) {
-		return;
+		return res.send(body.error.issues);
 	}
 
 	const user = await auth.createUser({
@@ -44,6 +49,7 @@ controller.post("/register", async (req, res) => {
 		},
 		attributes: {
 			email: body.data.email,
+			username: body.data.username,
 		},
 	});
 
@@ -55,7 +61,13 @@ controller.post("/register", async (req, res) => {
 	const handler = auth.handleRequest(req, res);
 	handler.setSession(session);
 
-	return res.status(302).setHeader("Location", "/").end();
+	return res.status(HttpStatusCode.OK_200).send({
+		data: {
+			id: user.userId,
+			email: body.data.email,
+			token: session.sessionId,
+		},
+	});
 });
 
 export default controller;

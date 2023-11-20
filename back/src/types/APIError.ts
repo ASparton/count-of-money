@@ -1,8 +1,7 @@
-import APIErrorId from "./APIErrorId";
 import HttpStatusCode from "./HttpStatusCode";
 
 type APIError = {
-	id: APIErrorId;
+	id: string;
 	code: HttpStatusCode;
 };
 
