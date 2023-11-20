@@ -4,7 +4,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "lint": "biome lint src/",
+    "format": "biome format --write src/"
   },
   "dependencies": {
     "@lucia-auth/adapter-prisma": "^3.0.2",
@@ -13,6 +15,7 @@
     "lucia": "^2.7.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.3.3",
     "@types/express": "4.17.21",
     "@types/jest": "^29.5.8",
     "@types/node": "20.9.0",
