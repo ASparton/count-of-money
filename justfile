@@ -1,3 +1,4 @@
+TEST_SERVICE := "test"
 BACKEND_SERVICE := "back"
 DATABASE_SERVICE := "database"
 
@@ -31,8 +32,8 @@ shell SERVICE SHELL='sh':
 reset:
     @docker compose down --volumes
 
-update SERVICE:
-    @docker compose up {{SERVICE}} -d
+test:
+    @docker compose up {{TEST_SERVICE}}
 
 migrate:
     @docker compose exec {{BACKEND_SERVICE}} {{MIGRATE_COMMAND}}
