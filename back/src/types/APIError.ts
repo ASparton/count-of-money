@@ -1,5 +1,5 @@
-import APIErrorId from "./APIErrorId";
-import HttpStatusCode from "./HttpStatusCode";
+import APIErrorId from './APIErrorId';
+import HttpStatusCode from './HttpStatusCode';
 
 type APIError = {
 	id: APIErrorId;
