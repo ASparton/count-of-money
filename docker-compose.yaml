@@ -23,6 +23,8 @@ services:
     build: ./back
     container_name: test
 
+    entrypoint: npm run test
+
     environment:
       DATABASE_URL: ${TEST_DATABASE_URL}
 
