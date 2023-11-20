@@ -4,6 +4,11 @@
     "outDir": "dist",
     "strict": true,
     "lib": ["esnext"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@controllers/*": ["./src/controllers/*"],
+      "~lucia": ["./src/lucia.ts"],
+      "#types/*": ["./src/types/*"],
+      "@dto/*": ["./src/types/dto/*"]
   }
 }
