@@ -30,7 +30,7 @@
 		"semantic-release": "^22.0.7"
 	},
 	"scripts": {
-		"setup": "npm i && npx husky install"
+		"setup": "npm i && npx husky install && chmod u+x .husky/commit-msg"
 	},
 	"repository": {
 		"type": "git",
