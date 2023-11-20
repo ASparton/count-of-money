@@ -50,4 +50,5 @@ model Article {
   source_feed    Feed    @relation(references: [id], fields: [source_feed_id], onDelete: Cascade)
 
   @@index([source_feed_id])
+  @@index([title])
 }

@@ -3,6 +3,7 @@ BACKEND_SERVICE := "back"
 DATABASE_SERVICE := "database"
 
 MIGRATE_COMMAND := "npx prisma migrate dev"
+POPULATE_COMMAND := "npx prisma db seed"
 DATABASE_ACCESS_COMMAND := "mysql -u root -p"
 
 up *FLAGS:
@@ -40,3 +41,6 @@ migrate:
 
 db:
     @docker compose exec -it {{DATABASE_SERVICE}} {{DATABASE_ACCESS_COMMAND}}
+
+populate:
+    @docker exec {{BACKEND_SERVICE}} {{POPULATE_COMMAND}}

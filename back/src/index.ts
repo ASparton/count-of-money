@@ -1,6 +1,7 @@
 import express from 'express';
 
 import auth from '@controllers/auth';
+import articles from '@controllers/articles';
 
 const PORT = 3000;
 const app = express();
@@ -12,6 +13,7 @@ app.get('/status', (req, res) => {
 });
 
 app.use('/api/auth/', auth);
+app.use('/api/articles', articles);
 
 app.listen(PORT, () =>
 	console.log(`🚀 Server ready at: http://localhost:${PORT}`),
