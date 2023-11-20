@@ -19,7 +19,7 @@ services:
       - ./back/package.json:/app/package.json
 
     depends_on:
-        - database
+      - database
 
   test:
     build: ./back
@@ -36,7 +36,7 @@ services:
       - ./back/package.json:/app/package.json
 
     depends_on:
-        - database
+      - database
 
   adminer:
     image: adminer
@@ -54,20 +54,18 @@ services:
       - database:db
 
   database:
-    image: mysql:8.0
+    image: postgres:16-alpine
     container_name: database
 
     restart: always
 
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: count_of_money
-
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      POSTGRES_DB: count_of_money
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
     volumes:
-      - database-data:/var/lib/mysql
+      - database-data:/var/lib/postgresql/data
 
 volumes:
   database-data:

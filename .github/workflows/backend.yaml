@@ -17,8 +17,5 @@ jobs:
     - name: Set environment variables
       run: cp .env.local .env
 
-    - name: Build test docker image
-      run: docker compose build --no-cache test
-
     - name: Start tests
-      run: docker-compose up database test
+      run: docker compose up test

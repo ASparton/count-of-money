@@ -3,6 +3,6 @@
 set -ex
 
 npx prisma generate
-npx prisma migrate dev
+npx prisma migrate deploy
 
 npm run dev
