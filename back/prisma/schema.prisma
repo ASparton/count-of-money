@@ -31,3 +31,22 @@ model Key {
 
   @@index([user_id])
 }
+
+model Feed {
+  id   String @id @unique
+  url  String @unique
+  articles Article[]
+}
+
+model Article {
+  id             String  @id @unique
+  title          String
+  url            String  @unique
+  image_url      String?
+  content        String
+  published      DateTime
+  source_feed_id String
+  source_feed    Feed    @relation(references: [id], fields: [source_feed_id], onDelete: Cascade)
+
+  @@index([source_feed_id])
+}
