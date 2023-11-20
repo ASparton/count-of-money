@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "test": "jest",
-    "format": "biome format src/ --write",
-    "lint": "biome lint src/"
+    "lint": "biome lint src/",
+    "format": "biome format --write src/"
   },
   "dependencies": {
     "@lucia-auth/adapter-prisma": "^3.0.2",
