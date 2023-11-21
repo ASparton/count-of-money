@@ -1,3 +1,5 @@
+import HttpStatusCode from '#types/HttpStatusCode';
+
 enum ApiErrors {
 	/**
 	 * Raised when the email given to the login route is not used by a user
@@ -41,6 +43,15 @@ enum ApiErrors {
 	 * Raised when the resource at the given id was not found by prisma.
 	 */
 	RESOURCE_NOT_FOUND = 'RESOURCE_NOT_FOUND',
+}
+
+export class APIError extends Error {
+	public errorCode: HttpStatusCode;
+
+	constructor(type: ApiErrors, errorCode: HttpStatusCode) {
+		super(type);
+		this.errorCode = errorCode;
+	}
 }
 
 export default ApiErrors;

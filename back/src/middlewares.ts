@@ -1,12 +1,12 @@
-import { LuciaError } from 'lucia';
 import { NextFunction, Request, Response } from 'express';
+import { LuciaError } from 'lucia';
 
-import ApiErrors from '~apiErrors';
+import ApiErrors, { APIError } from '~apiErrors';
 import HttpStatusCode from '#types/HttpStatusCode';
 
-import { auth } from '~lucia';
-import { ZodError } from 'zod';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { ZodError } from 'zod';
+import { auth } from '~lucia';
 
 /**
  * Log the incoming request on the command line.
@@ -96,6 +96,9 @@ export function errorHandler<T>(
 					.send(ApiErrors.UNEXPECTED_SERVER_ERROR);
 				break;
 		}
+	} else if (err instanceof APIError) {
+		console.log('[error] %s', err);
+		res.status(err.errorCode).send(err.message);
 	} else {
 		console.log('[error] %s', err);
 		res
