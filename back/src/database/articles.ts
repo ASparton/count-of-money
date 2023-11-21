@@ -1,5 +1,5 @@
-import { database } from '~lucia';
 import { Article, Prisma } from '@prisma/client';
+import { database } from '~lucia';
 
 export async function findArticles(keywords: string[]): Promise<Article[]> {
 	// Build keyword filter query
@@ -20,4 +20,12 @@ export async function findArticles(keywords: string[]): Promise<Article[]> {
 		};
 
 	return await database.article.findMany(query);
+}
+
+export async function findArticleById(id: number): Promise<Article | null> {
+	return await database.article.findUnique({
+		where: {
+			id: id,
+		},
+	});
 }

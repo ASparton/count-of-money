@@ -39,19 +39,19 @@ model Key {
 }
 
 model Feed {
-    id       String    @id @unique
+    id       Int    @id @default(autoincrement())
     url      String    @unique
     articles Article[]
 }
 
 model Article {
-    id             String   @id @unique
+    id       Int    @id @default(autoincrement())
     title          String
     url            String   @unique
     image_url      String?
     content        String
     published      DateTime
-    source_feed_id String
+    source_feed_id Int
     source_feed    Feed     @relation(references: [id], fields: [source_feed_id], onDelete: Cascade)
 
   @@index([source_feed_id])
