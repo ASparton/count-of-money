@@ -1,20 +1,31 @@
-import express from 'express';
-import ApiErrors, { APIError } from '~apiErrors';
 import HttpStatusCode from '#types/HttpStatusCode';
 import AllArticlesDTO from '#types/dto/articles/AllArticlesDTO';
 import OneArticleDTO from '#types/dto/articles/OneArticleDTO';
-import { findArticleById, findArticles } from '../database/articles';
+import { Article } from '@prisma/client';
+import express from 'express';
+import ApiErrors, { APIError } from '~apiErrors';
+import { isAuthenticated } from '~middlewares';
+import {
+	findArticleById,
+	findArticlesByKeywords,
+	findCountRestrictedArticles,
+} from '../database/articles';
 
 const controller = express.Router();
 
-controller.get('/', async (req, res) => {
-	let keywords: string[] = [];
-	const queryParams = AllArticlesDTO.safeParse(req.query);
-	if (queryParams.success)
-		keywords = getKeywordsFromQueryParam(queryParams.data.keywords);
+controller.get('/', isAuthenticated, async (req, res) => {
+	let articlesFound: Article[] = [];
 
-	const articles = await findArticles(keywords);
-	return res.status(HttpStatusCode.OK_200).send(articles);
+	if (req.cookies._isAuth) {
+		let keywords: string[] = [];
+		const queryParams = AllArticlesDTO.safeParse(req.query);
+		if (queryParams.success)
+			keywords = getKeywordsFromQueryParam(queryParams.data.keywords);
+
+		articlesFound = await findArticlesByKeywords(keywords);
+	} else articlesFound = await findCountRestrictedArticles();
+
+	return res.status(HttpStatusCode.OK_200).send(articlesFound);
 });
 
 controller.get('/:id', async (req, res) => {

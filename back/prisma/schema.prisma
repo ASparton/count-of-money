@@ -39,13 +39,14 @@ model Key {
 }
 
 model Feed {
-    id       Int    @id @default(autoincrement())
-    url      String    @unique
-    articles Article[]
+    id                 Int       @id @default(autoincrement())
+    url                String    @unique
+    min_articles_count Int       @default(3)
+    articles           Article[]
 }
 
 model Article {
-    id       Int    @id @default(autoincrement())
+    id             Int      @id @default(autoincrement())
     title          String
     url            String   @unique
     image_url      String?
@@ -54,8 +55,8 @@ model Article {
     source_feed_id Int
     source_feed    Feed     @relation(references: [id], fields: [source_feed_id], onDelete: Cascade)
 
-  @@index([source_feed_id])
-  @@index([title])
+    @@index([source_feed_id])
+    @@index([title])
 }
 
 model Keyword {

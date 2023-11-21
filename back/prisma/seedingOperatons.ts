@@ -39,14 +39,17 @@ const exampleFeeds: Feed[] = [
 	{
 		id: 1,
 		url: 'https://cointelegraph.com/rss/tag/bitcoin',
+		min_articles_count: 3,
 	},
 	{
 		id: 2,
 		url: 'https://cointelegraph.com/rss/tag/altcoin',
+		min_articles_count: 2,
 	},
 	{
 		id: 3,
 		url: 'https://cointelegraph.com/rss/tag/ethereum',
+		min_articles_count: 1,
 	},
 ];
 
@@ -98,6 +101,18 @@ export const exampleArticles: Article[] = [
 		image_url:
 			'https://cointelegraph.com/magazine/wp-content/uploads/2023/11/nov-18-scaled.jpg',
 	},
+	{
+		id: 5,
+		title:
+			'Michael Saylor’s a fan, but Frisby says bull run needs a new guru: X Hall of Flame',
+		url: 'https://cointelegraph.com/magazine/michael-saylor-fan-dominic-frisby-bull-run-new-guru-x-hall-of-flame/',
+		content:
+			'<p style="float:right; margin:0 0 10px 15px; width:240px;"><img src="https://cointelegraph.com/magazine/wp-content/uploads/2023/11/Crypto-X-Hall-of-Flame-Dominic-Frisby-scaled.jpg"></p><p>Bitcoiner Dominic Frisby counts Michael Saylor as a fan… but says we need a new Bitcoin evangalist & narrative to propel the next bull run.</p>',
+		published: new Date('Tue, 21 Nov 2023 14:30:00 +0000'),
+		source_feed_id: 3,
+		image_url:
+			'https://cointelegraph.com/magazine/wp-content/uploads/2023/11/Crypto-X-Hall-of-Flame-Dominic-Frisby-scaled.jpg',
+	},
 ];
 
 export async function populateUser(
@@ -139,6 +154,14 @@ export async function populateArticles(
 		);
 	}
 	console.log('Article population finished.');
+}
+
+export async function deleteAllUsers(
+	prismaClient: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
+) {
+	console.log('Deleting all Feed and Article data...');
+	await prismaClient.user.deleteMany();
+	console.log('Feed and Article data deleted.');
 }
 
 export async function deleteAllFeeds(
