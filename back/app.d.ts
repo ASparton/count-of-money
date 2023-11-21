@@ -6,3 +6,12 @@ declare namespace Lucia {
 	};
 	type DatabaseSessionAttributes = {};
 }
+
+declare namespace Express {
+	export interface Request {
+		lucia: {
+			userId: string
+			sessionId: string
+		}
+	}
+}

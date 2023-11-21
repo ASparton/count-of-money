@@ -26,6 +26,11 @@ enum ApiErrors {
 	 * used by a user in the database.
 	 */
 	EMAIL_ALREADY_TAKEN = 'EMAIL_ALREADY_TAKEN',
+
+	/**
+	 * Raised when the user token is not valid, or the token was not given.
+	 */
+	UNAUTHORIZED = 'UNAUTHORIZED',
 }
 
 export default ApiErrors;
