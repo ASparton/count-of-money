@@ -35,7 +35,7 @@ const exampleUsers: User[] = [
 	},
 ];
 
-const exampleFeeds: Feed[] = [
+export const exampleFeeds: Feed[] = [
 	{
 		id: 1,
 		url: 'https://cointelegraph.com/rss/tag/bitcoin',

@@ -19,6 +19,26 @@ export function logger(req: Request, _: Response, next: NextFunction) {
 /**
  * Only pass to the next middleware if the request is authenticated.
  */
+export async function adminRoleRequired(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) {
+	console.log('[AUTH] admin endpoint middleware');
+
+	if (!req.lucia || !req.lucia.user || !req.lucia.sessionId)
+		return res
+			.status(HttpStatusCode.UNAUTHORIZED_401)
+			.send(ApiErrors.UNAUTHORIZED);
+	if (!req.lucia.user.is_admin)
+		return res.status(HttpStatusCode.FORBIDDEN_403).send(ApiErrors.FORBIDDEN);
+
+	next();
+}
+
+/**
+ * Only pass to the next middleware if the request is authenticated.
+ */
 export async function authenticationRequired(
 	req: Request,
 	res: Response,

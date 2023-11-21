@@ -5,9 +5,15 @@ import cors from 'cors';
 
 import articles from '@controllers/articles';
 import auth from '@controllers/auth';
+import feeds from '@controllers/feeds';
 import users from '@controllers/users';
 
-import { authenticationRequired, errorHandler, logger } from '~middlewares';
+import {
+	adminRoleRequired,
+	authenticationRequired,
+	errorHandler,
+	logger,
+} from '~middlewares';
 
 const app = express();
 
@@ -18,6 +24,7 @@ app.use(logger);
 
 app.use('/api/users/', auth, authenticationRequired, users);
 app.use('/api/articles', articles);
+app.use('/api/feeds', authenticationRequired, adminRoleRequired, feeds);
 
 app.use(errorHandler);
 

@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --colors --coverage",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --colors --coverage --runInBand",
     "lint": "biome lint src/",
     "format": "biome format --write src/"
   },

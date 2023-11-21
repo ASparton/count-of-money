@@ -42,7 +42,7 @@ controller.post('/register', async (req, res) => {
 		},
 		attributes: {
 			email: body.email,
-			username: body.email,
+			username: body.username,
 			currency: body.currency as string,
 			is_admin: false,
 		},

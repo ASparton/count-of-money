@@ -13,9 +13,10 @@ import app from '../../src/app';
 
 let authToken = '';
 
-describe('Articles router tests', () => {
+describe('Articles controller tests', () => {
 	beforeAll(async () => {
 		await deleteAllUsers(database);
+		await deleteAllFeeds(database);
 	});
 
 	describe('GET all articles', () => {
@@ -126,6 +127,7 @@ describe('Articles router tests', () => {
 
 		afterAll(async () => {
 			await deleteAllFeeds(database);
+			await deleteAllUsers(database);
 		});
 	});
 
