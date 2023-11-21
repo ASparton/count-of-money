@@ -22,15 +22,12 @@ controller.post('/login', async (req, res) => {
 		attributes: {},
 	});
 
-	const handler = auth.handleRequest(req, res);
-	handler.setSession(session);
-
 	return res.status(HttpStatusCode.OK_200).send({
-		data: {
+		user: {
 			id: key.userId,
 			email: body.data.email,
-			token: session.sessionId,
 		},
+		token: session.sessionId,
 	});
 });
 
@@ -58,15 +55,12 @@ controller.post('/register', async (req, res) => {
 		attributes: {},
 	});
 
-	const handler = auth.handleRequest(req, res);
-	handler.setSession(session);
-
 	return res.status(HttpStatusCode.OK_200).send({
-		data: {
+		user: {
 			id: user.userId,
 			email: body.data.email,
-			token: session.sessionId,
 		},
+		token: session.sessionId,
 	});
 });
 
