@@ -6,6 +6,7 @@ import HttpStatusCode from '#types/HttpStatusCode';
 
 import { auth } from '~lucia';
 import { ZodError } from 'zod';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 /**
  * Log the incoming request on the command line.
@@ -80,6 +81,21 @@ export function errorHandler<T>(
 	} else if (err instanceof ZodError) {
 		console.log('[error] %s', err.message);
 		res.status(HttpStatusCode.BAD_REQUEST_400).send(err.message);
+	} else if (err instanceof PrismaClientKnownRequestError) {
+		console.log('[error] %s %s', err.code, err.meta);
+		switch (err.code) {
+			case 'P2003':
+				res
+					.status(HttpStatusCode.NOT_FOUND_404)
+					.send(ApiErrors.RESOURCE_NOT_FOUND);
+				break;
+
+			default:
+				res
+					.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
+					.send(ApiErrors.UNEXPECTED_SERVER_ERROR);
+				break;
+		}
 	} else {
 		console.log('[error] %s', err);
 		res

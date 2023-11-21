@@ -14,7 +14,7 @@ model User {
     auth_session Session[]
     key          Key[]
     keywords     Keyword[]
-    currency     Currency     @default(EUR)
+    currency     String       @default("EUR")
     cryptos      UserCrypto[]
     is_admin     Boolean      @default(false)
 }
@@ -80,8 +80,4 @@ model UserCrypto {
     crypto_id Int
 
     @@id([user_id, crypto_id])
-}
-
-enum Currency {
-    EUR
 }
