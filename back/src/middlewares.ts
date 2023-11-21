@@ -5,6 +5,7 @@ import ApiErrors from '~apiErrors';
 import HttpStatusCode from '#types/HttpStatusCode';
 
 import { auth } from '~lucia';
+import { ZodError } from 'zod';
 
 /**
  * Log the incoming request on the command line.
@@ -34,8 +35,8 @@ export async function isAuthenticated(
 
 	// Set user and session info for convenience
 	req.lucia = {
-		userId: session.user.userId,
 		sessionId: session.sessionId,
+		user: session.user,
 	};
 
 	next();
@@ -49,9 +50,8 @@ export function errorHandler<T>(
 	res: Response,
 	next: NextFunction,
 ) {
-	console.log('[error] %s', err);
-
 	if (err instanceof LuciaError) {
+		console.log('[error] %s', err.message);
 		switch (err.message) {
 			case 'AUTH_INVALID_KEY_ID':
 				res
@@ -77,10 +77,11 @@ export function errorHandler<T>(
 					.send(ApiErrors.UNEXPECTED_AUTHENTICATION_ERROR);
 				break;
 		}
-	}
-
-	// TODO: handle zod errors
-	else {
+	} else if (err instanceof ZodError) {
+		console.log('[error] %s', err.message);
+		res.status(HttpStatusCode.BAD_REQUEST_400).send(err.message);
+	} else {
+		console.log('[error] %s', err);
 		res
 			.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
 			.send(ApiErrors.UNEXPECTED_SERVER_ERROR);

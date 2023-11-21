@@ -14,7 +14,7 @@ model User {
     auth_session Session[]
     key          Key[]
     keywords     Keyword[]
-    currency     Currency
+    currency     Currency     @default(EUR)
     cryptos      UserCrypto[]
     is_admin     Boolean      @default(false)
 }
