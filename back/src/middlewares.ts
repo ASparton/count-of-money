@@ -1,14 +1,14 @@
-import HttpStatusCode from "#types/HttpStatusCode";
-import { NextFunction, Request, Response } from "express";
-import { LuciaError } from "lucia";
+import HttpStatusCode from '#types/HttpStatusCode';
+import { NextFunction, Request, Response } from 'express';
+import { LuciaError } from 'lucia';
 
-import ApiErrors from "~apiErrors";
+import ApiErrors from '~apiErrors';
 
 /**
  * Log the incoming request on the command line.
  */
 export function logger(req: Request, _: Response, next: NextFunction) {
-	console.log("[%s] %s", req.method, req.path);
+	console.log('[%s] %s', req.method, req.path);
 	next();
 }
 
@@ -21,23 +21,23 @@ export function errorHandler<T>(
 	res: Response,
 	next: NextFunction,
 ) {
-	console.log("[error] %s", err.message);
+	console.log('[error] %s', err);
 
 	if (err instanceof LuciaError) {
 		switch (err.message) {
-			case "AUTH_INVALID_KEY_ID":
+			case 'AUTH_INVALID_KEY_ID':
 				res
 					.status(HttpStatusCode.BAD_REQUEST_400)
 					.send(ApiErrors.INVALID_EMAIL_ADDRESS);
 				break;
 
-			case "AUTH_INVALID_PASSWORD":
+			case 'AUTH_INVALID_PASSWORD':
 				res
 					.status(HttpStatusCode.BAD_REQUEST_400)
 					.send(ApiErrors.INVALID_PASSWORD);
 				break;
 
-			case "AUTH_DUPLICATE_KEY_ID":
+			case 'AUTH_DUPLICATE_KEY_ID':
 				res
 					.status(HttpStatusCode.BAD_REQUEST_400)
 					.send(ApiErrors.EMAIL_ALREADY_TAKEN);

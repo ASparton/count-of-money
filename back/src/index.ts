@@ -1,10 +1,10 @@
-import express from "express";
-import "express-async-errors";
+import express from 'express';
+import 'express-async-errors';
 
-import cors from "cors";
-import auth from "@controllers/auth";
+import cors from 'cors';
+import auth from '@controllers/auth';
 
-import { errorHandler, logger } from "~middlewares";
+import { errorHandler, logger } from '~middlewares';
 
 const PORT = 3000;
 const app = express();
@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use(logger);
 
-app.use("/api/auth/", auth);
+app.use('/api/users/', auth);
 
 app.use(errorHandler);
 

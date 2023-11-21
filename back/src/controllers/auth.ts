@@ -1,21 +1,21 @@
-import express from "express";
+import express from 'express';
 
-import { auth } from "~lucia";
+import { auth } from '~lucia';
 
-import LoginDTO from "@dto/auth/LoginDTO";
-import RegisterDTO from "@dto/auth/RegisterDTO";
-import HttpStatusCode from "#types/HttpStatusCode";
+import LoginDTO from '@dto/auth/LoginDTO';
+import RegisterDTO from '@dto/auth/RegisterDTO';
+import HttpStatusCode from '#types/HttpStatusCode';
 
 const controller = express.Router();
 
-controller.post("/login", async (req, res) => {
+controller.post('/login', async (req, res) => {
 	const body = LoginDTO.safeParse(req.body);
 
 	if (!body.success) {
 		return res.send(body.error.issues);
 	}
 
-	const key = await auth.useKey("email", body.data.email, body.data.password);
+	const key = await auth.useKey('email', body.data.email, body.data.password);
 
 	const session = await auth.createSession({
 		userId: key.userId,
@@ -34,7 +34,7 @@ controller.post("/login", async (req, res) => {
 	});
 });
 
-controller.post("/register", async (req, res) => {
+controller.post('/register', async (req, res) => {
 	const body = RegisterDTO.safeParse(req.body);
 
 	if (!body.success) {
@@ -43,7 +43,7 @@ controller.post("/register", async (req, res) => {
 
 	const user = await auth.createUser({
 		key: {
-			providerId: "email",
+			providerId: 'email',
 			providerUserId: body.data.email,
 			password: body.data.password,
 		},
