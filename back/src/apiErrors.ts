@@ -40,6 +40,11 @@ enum ApiErrors {
 	UNAUTHORIZED = 'UNAUTHORIZED',
 
 	/**
+	 * Raised when the user is not admin and the endpoint reached need admin rights
+	 */
+	FORBIDDEN = 'FORBIDDEN',
+
+	/**
 	 * Raised when the resource at the given id was not found by prisma.
 	 */
 	RESOURCE_NOT_FOUND = 'RESOURCE_NOT_FOUND',
