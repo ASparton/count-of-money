@@ -9,18 +9,22 @@ const exampleUsers: User[] = [
 	{
 		id: '1',
 		email: 'alexis.moins@epitech.eu',
+		username: 'Alexis Moins'
 	},
 	{
 		id: '2',
 		email: 'alexandre.sparton@epitech.eu',
+		username: 'Alexandre Sparton'
 	},
 	{
 		id: '3',
 		email: 'amaury.bourget@epitech.eu',
+		username: 'Amaury Bourget'
 	},
 	{
 		id: '4',
 		email: 'medhi@epitech.eu',
+		username: 'Medhi'
 	},
 ];
 
