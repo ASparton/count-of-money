@@ -22,10 +22,20 @@ enum ApiErrors {
 	UNEXPECTED_SERVER_ERROR = 'UNEXPECTED_SERVER_ERROR',
 
 	/**
+	 * Raised when an unexpected zod error occured when parsing the request.
+	 */
+	REQUEST_PARSING_ERROR = 'REQUEST_PARSING_ERROR',
+
+	/**
 	 * Raised when the email given to the register route is already
 	 * used by a user in the database.
 	 */
 	EMAIL_ALREADY_TAKEN = 'EMAIL_ALREADY_TAKEN',
+
+	/**
+	 * Raised when the user token is not valid, or the token was not given.
+	 */
+	UNAUTHORIZED = 'UNAUTHORIZED',
 }
 
 export default ApiErrors;

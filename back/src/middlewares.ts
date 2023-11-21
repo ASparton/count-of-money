@@ -1,8 +1,11 @@
-import HttpStatusCode from '#types/HttpStatusCode';
-import { NextFunction, Request, Response } from 'express';
 import { LuciaError } from 'lucia';
+import { NextFunction, Request, Response } from 'express';
 
 import ApiErrors from '~apiErrors';
+import HttpStatusCode from '#types/HttpStatusCode';
+
+import { auth } from '~lucia';
+import { ZodError } from 'zod';
 
 /**
  * Log the incoming request on the command line.
@@ -13,6 +16,32 @@ export function logger(req: Request, _: Response, next: NextFunction) {
 }
 
 /**
+ * Only pass to the next middleware if the request is authenticated.
+ */
+export async function isAuthenticated(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) {
+	console.log('[AUTH] protected endpoint middleware');
+	const handler = auth.handleRequest(req, res);
+	const session = await handler.validateBearerToken();
+
+	if (!session) {
+		return res
+			.status(HttpStatusCode.UNAUTHORIZED_401)
+			.send(ApiErrors.UNAUTHORIZED);
+	}
+
+	// Set user and session info for convenience
+	req.lucia = {
+		sessionId: session.sessionId,
+		user: session.user,
+	};
+
+	next();
+}
+/**
  * Handle errors raised by the controllers.
  */
 export function errorHandler<T>(
@@ -21,9 +50,8 @@ export function errorHandler<T>(
 	res: Response,
 	next: NextFunction,
 ) {
-	console.log('[error] %s', err);
-
 	if (err instanceof LuciaError) {
+		console.log('[error] %s', err.message);
 		switch (err.message) {
 			case 'AUTH_INVALID_KEY_ID':
 				res
@@ -49,10 +77,11 @@ export function errorHandler<T>(
 					.send(ApiErrors.UNEXPECTED_AUTHENTICATION_ERROR);
 				break;
 		}
-	}
-
-	// TODO: handle zod errors
-	else {
+	} else if (err instanceof ZodError) {
+		console.log('[error] %s', err.message);
+		res.status(HttpStatusCode.BAD_REQUEST_400).send(err.message);
+	} else {
+		console.log('[error] %s', err);
 		res
 			.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
 			.send(ApiErrors.UNEXPECTED_SERVER_ERROR);

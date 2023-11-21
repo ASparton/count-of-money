@@ -3,6 +3,17 @@ declare namespace Lucia {
 	type DatabaseUserAttributes = {
 		email: string,
 		username: string
+		currency: string
+		is_admin: boolean
 	};
 	type DatabaseSessionAttributes = {};
+}
+
+declare namespace Express {
+	export interface Request {
+		lucia: {
+			sessionId: string
+			user: import("lucia").User
+		}
+	}
 }
