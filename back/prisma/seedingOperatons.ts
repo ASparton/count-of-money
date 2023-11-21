@@ -9,21 +9,29 @@ const exampleUsers: User[] = [
 		id: '1',
 		email: 'alexis.moins@epitech.eu',
 		username: 'Alexis Moins',
+		currency: 'EUR',
+		is_admin: true
 	},
 	{
 		id: '2',
 		email: 'alexandre.sparton@epitech.eu',
 		username: 'Alexandre Sparton',
+		currency: 'EUR',
+		is_admin: false
 	},
 	{
 		id: '3',
 		email: 'amaury.bourget@epitech.eu',
 		username: 'Amaury Bourget',
+		currency: 'EUR',
+		is_admin: true
 	},
 	{
 		id: '4',
 		email: 'medhi@epitech.eu',
 		username: 'Medhi',
+		currency: 'EUR',
+		is_admin: false
 	},
 ];
 

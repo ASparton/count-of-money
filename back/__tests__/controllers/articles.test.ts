@@ -1,4 +1,3 @@
-import { Article } from '@prisma/client';
 import {
 	deleteAllFeeds,
 	exampleArticles,
@@ -24,7 +23,9 @@ describe('Articles router tests', () => {
 		});
 
 		test('GET all articles with ignored params', async () => {
-			const res = await request(app).get('/api/articles?date=2023-10-10&orderBy=desc');
+			const res = await request(app).get(
+				'/api/articles?date=2023-10-10&orderBy=desc'
+			);
 			expect(JSON.parse(JSON.stringify(res.body))).toStrictEqual(
 				JSON.parse(JSON.stringify(exampleArticles))
 			);
@@ -51,12 +52,15 @@ describe('Articles router tests', () => {
 		});
 
 		test('GET all articles with multiple existing keywords', async () => {
-			const res = await request(app).get('/api/articles?keywords=bitcoin;wallet');
+			const res = await request(app).get(
+				'/api/articles?keywords=bitcoin;wallet'
+			);
 			expect(JSON.parse(JSON.stringify(res.body))).toStrictEqual(
 				JSON.parse(
 					JSON.stringify(
 						exampleArticles.filter(
-							(article) => article.id === '1' || article.id === '2' || article.id === '3'
+							(article) =>
+								article.id === '1' || article.id === '2' || article.id === '3'
 						)
 					)
 				)
