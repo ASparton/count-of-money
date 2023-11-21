@@ -1,15 +1,23 @@
 import express from 'express';
+import 'express-async-errors';
 
-const app = express();
+import cors from 'cors';
+import auth from '@controllers/auth';
 
-app.use(express.json());
-
-app.get('/status', (req, res) => {
-	res.send({ healthy: true });
-});
+import { errorHandler, logger } from '~middlewares';
 
 const PORT = 3000;
+const app = express();
 
-const server = app.listen(PORT, () =>
+app.use(cors());
+app.use(express.json());
+
+app.use(logger);
+
+app.use('/api/users/', auth);
+
+app.use(errorHandler);
+
+app.listen(PORT, () =>
 	console.log(`🚀 Server ready at: http://localhost:${PORT}`),
 );
