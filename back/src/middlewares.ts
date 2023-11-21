@@ -19,7 +19,7 @@ export function logger(req: Request, _: Response, next: NextFunction) {
 /**
  * Only pass to the next middleware if the request is authenticated.
  */
-export async function isAuthenticated(
+export async function authenticationRequired(
 	req: Request,
 	res: Response,
 	next: NextFunction,
@@ -42,6 +42,32 @@ export async function isAuthenticated(
 
 	next();
 }
+
+/**
+ * Get user info if authenticated and go to next handler
+ */
+export async function isAuthenticated(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) {
+	console.log('[AUTH] can be authenticated endpoint middleware');
+	const handler = auth.handleRequest(req, res);
+	const session = await handler.validateBearerToken();
+	if (!req.cookies) req.cookies = {};
+	req.cookies._isAuth = session !== null; // Provide info to next handler that user is authenticated or not
+
+	if (session !== null) {
+		// Set user and session info for convenience
+		req.lucia = {
+			sessionId: session.sessionId,
+			user: session.user,
+		};
+	}
+
+	next();
+}
+
 /**
  * Handle errors raised by the controllers.
  */

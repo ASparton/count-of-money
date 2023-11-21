@@ -1,7 +1,9 @@
-import { Article, Prisma } from '@prisma/client';
+import { Article, Feed, Prisma } from '@prisma/client';
 import { database } from '~lucia';
 
-export async function findArticles(keywords: string[]): Promise<Article[]> {
+export async function findArticlesByKeywords(
+	keywords: string[],
+): Promise<Article[]> {
 	// Build keyword filter query
 	const keywordFilters = keywords.map((keyword) => {
 		return {
@@ -22,10 +24,26 @@ export async function findArticles(keywords: string[]): Promise<Article[]> {
 	return await database.article.findMany(query);
 }
 
+export async function findCountRestrictedArticles(): Promise<Article[]> {
+	let articlesFound: Article[] = [];
+	const feeds = await database.feed.findMany({ include: { articles: true } });
+	for (const feed of feeds)
+		articlesFound = articlesFound.concat(await getMinArticlesCountOfFeed(feed));
+	return articlesFound;
+}
+
 export async function findArticleById(id: number): Promise<Article | null> {
 	return await database.article.findUnique({
 		where: {
 			id: id,
 		},
+	});
+}
+
+async function getMinArticlesCountOfFeed(feed: Feed): Promise<Article[]> {
+	return await database.article.findMany({
+		where: { source_feed_id: feed.id },
+		orderBy: { published: 'asc' },
+		take: feed.min_articles_count,
 	});
 }
