@@ -7,7 +7,10 @@
 		"esModuleInterop": true,
 		"paths": {
 			"@controllers/*": ["./src/controllers/*"],
+			"@composables/*": ["./src/composables/*"],
 			"~lucia": ["./src/lucia.ts"],
+			"~middlewares": ["./src/middlewares.ts"],
+			"~apiErrors": ["./src/apiErrors.ts"],
 			"#types/*": ["./src/types/*"],
 			"@dto/*": ["./src/types/dto/*"]
 		}
