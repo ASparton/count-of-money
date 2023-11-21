@@ -10,17 +10,7 @@ const jestConfig: JestConfigWithTsJest = {
 		prefix: '<rootDir>/',
 	}),
 	extensionsToTreatAsEsm: ['.ts'],
-	transform: {
-		'^.+\\.ts?$': [
-			'ts-jest',
-			{
-				useESM: true,
-			},
-		],
-	},
-	// transformIgnorePatterns: [
-	// 	'node_modules/@lucia-auth',
-	// ],
+	transform: {},
 };
 
 export default jestConfig;
