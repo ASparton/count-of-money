@@ -1,14 +1,15 @@
 {
-  "compilerOptions": {
-    "sourceMap": true,
-    "outDir": "dist",
-    "strict": true,
-    "lib": ["esnext"],
-    "esModuleInterop": true,
-    "paths": {
-      "@controllers/*": ["./src/controllers/*"],
-      "~lucia": ["./src/lucia.ts"],
-      "#types/*": ["./src/types/*"],
-      "@dto/*": ["./src/types/dto/*"]
-  }
+	"compilerOptions": {
+		"sourceMap": true,
+		"outDir": "dist",
+		"strict": true,
+		"lib": ["esnext"],
+		"esModuleInterop": true,
+		"paths": {
+			"@controllers/*": ["./src/controllers/*"],
+			"~lucia": ["./src/lucia.ts"],
+			"#types/*": ["./src/types/*"],
+			"@dto/*": ["./src/types/dto/*"]
+		}
+	}
 }

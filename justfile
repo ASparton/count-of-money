@@ -34,7 +34,7 @@ reset:
     @docker compose down --volumes
 
 test:
-    @docker compose up {{TEST_SERVICE}}
+    @docker compose up {{TEST_SERVICE}} --build
 
 migrate:
     @docker compose exec {{BACKEND_SERVICE}} {{MIGRATE_COMMAND}}

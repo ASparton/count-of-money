@@ -39,7 +39,7 @@ const exampleFeeds: Feed[] = [
 	},
 ];
 
-const exampleArticles: Article[] = [
+export const exampleArticles: Article[] = [
 	{
 		id: '1',
 		title:
@@ -119,7 +119,7 @@ async function populateFeeds() {
 	console.log('Feed population finished.');
 }
 
-async function populateArticles() {
+export async function populateArticles() {
 	console.log('Start populating Article...');
 	for (const exampleArticle of exampleArticles) {
 		const article = await prisma.article.create({

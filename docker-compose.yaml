@@ -33,6 +33,7 @@ services:
     volumes:
       - ./back/src:/app/src
       - ./back/prisma:/app/prisma
+      - ./back/__tests__:/app/__tests__
       - ./back/package.json:/app/package.json
 
     depends_on:
