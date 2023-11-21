@@ -32,21 +32,19 @@ controller.post('/login', async (req, res) => {
 });
 
 controller.post('/register', async (req, res) => {
-	const body = RegisterDTO.safeParse(req.body);
-
-	if (!body.success) {
-		return res.send(body.error.issues);
-	}
+	const body = RegisterDTO.parse(req.body);
 
 	const user = await auth.createUser({
 		key: {
 			providerId: 'email',
-			providerUserId: body.data.email,
-			password: body.data.password,
+			providerUserId: body.email,
+			password: body.password,
 		},
 		attributes: {
-			email: body.data.email,
-			username: body.data.username,
+			email: body.email,
+			username: body.email,
+			currency: body.currency as string,
+			is_admin: false,
 		},
 	});
 
@@ -58,7 +56,10 @@ controller.post('/register', async (req, res) => {
 	return res.status(HttpStatusCode.OK_200).send({
 		user: {
 			id: user.userId,
-			email: body.data.email,
+			email: user.email,
+			username: user.username,
+			currency: user.currency,
+			is_admin: user.is_admin,
 		},
 		token: session.sessionId,
 	});

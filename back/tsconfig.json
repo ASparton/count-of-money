@@ -12,6 +12,7 @@
       "~middlewares": ["./src/middlewares.ts"],
       "~apiErrors": ["./src/apiErrors.ts"],
       "#types/*": ["./src/types/*"],
-      "@dto/*": ["./src/types/dto/*"]
+      "@dto/*": ["./src/types/dto/*"],
+      "@database/*": ["./src/database/*"]
   }
 }

@@ -8,11 +8,15 @@ datasource db {
 }
 
 model User {
-    id           String    @id @unique
+    id           String       @id @unique
     username     String
     email        String
     auth_session Session[]
     key          Key[]
+    keywords     Keyword[]
+    currency     Currency     @default(EUR)
+    cryptos      UserCrypto[]
+    is_admin     Boolean      @default(false)
 }
 
 model Session {
@@ -35,20 +39,49 @@ model Key {
 }
 
 model Feed {
-  id   String @id @unique
-  url  String @unique
-  articles Article[]
+    id       String    @id @unique
+    url      String    @unique
+    articles Article[]
 }
 
 model Article {
-  id             String  @id @unique
-  title          String
-  url            String  @unique
-  image_url      String?
-  content        String
-  published      DateTime
-  source_feed_id String
-  source_feed    Feed    @relation(references: [id], fields: [source_feed_id], onDelete: Cascade)
+    id             String   @id @unique
+    title          String
+    url            String   @unique
+    image_url      String?
+    content        String
+    published      DateTime
+    source_feed_id String
+    source_feed    Feed     @relation(references: [id], fields: [source_feed_id], onDelete: Cascade)
 
-  @@index([source_feed_id])
+    @@index([source_feed_id])
+}
+
+model Keyword {
+    id      Int    @id @default(autoincrement())
+    user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    user_id String
+    name    String
+}
+
+model Crypto {
+    id       Int          @id @default(autoincrement())
+    name     String       @unique
+    logo_url String
+    api_id   String
+    visible  Boolean      @default(false)
+    liked_by UserCrypto[]
+}
+
+model UserCrypto {
+    user      User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    user_id   String
+    crypto    Crypto @relation(references: [id], fields: [crypto_id], onDelete: Cascade)
+    crypto_id Int
+
+    @@id([user_id, crypto_id])
+}
+
+enum Currency {
+    EUR
 }
