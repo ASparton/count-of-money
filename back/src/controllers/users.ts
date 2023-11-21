@@ -7,7 +7,7 @@ const controller = express.Router();
 
 controller.post('/logout', async (req, res) => {
 	await auth.invalidateSession(req.lucia.sessionId);
-	res.send(HttpStatusCode.OK_200);
+	res.status(HttpStatusCode.OK_200).send();
 });
 
 export default controller;

@@ -22,6 +22,7 @@ export async function isAuthenticated(
 	res: Response,
 	next: NextFunction,
 ) {
+	console.log('[AUTH] protected endpoint middleware');
 	const handler = auth.handleRequest(req, res);
 	const session = await handler.validateBearerToken();
 
