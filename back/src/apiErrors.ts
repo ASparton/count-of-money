@@ -36,6 +36,11 @@ enum ApiErrors {
 	 * Raised when the user token is not valid, or the token was not given.
 	 */
 	UNAUTHORIZED = 'UNAUTHORIZED',
+
+	/**
+	 * Raised when the resource at the given id was not found by prisma.
+	 */
+	RESOURCE_NOT_FOUND = 'RESOURCE_NOT_FOUND',
 }
 
 export default ApiErrors;

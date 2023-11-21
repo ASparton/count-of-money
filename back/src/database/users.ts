@@ -13,3 +13,26 @@ export async function findUserById(id: string) {
 		},
 	});
 }
+
+interface UpdateUserOptions {
+	currency: string;
+	username: string;
+}
+
+export async function updateUser(
+	id: string,
+	{ username, currency }: UpdateUserOptions,
+) {
+	return await database.user.update({
+		where: { id },
+		data: { currency, username },
+		include: {
+			cryptos: {
+				include: {
+					crypto: true,
+				},
+			},
+			keywords: true,
+		},
+	});
+}
