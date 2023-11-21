@@ -35,6 +35,9 @@ reset:
 test:
     @docker compose up {{TEST_SERVICE}}
 
+update SERVICE:
+    @docker compose up {{SERVICE}} --build --detach
+
 migrate:
     @docker compose exec {{BACKEND_SERVICE}} {{MIGRATE_COMMAND}}
 
