@@ -1,21 +1,15 @@
 import HttpStatusCode from '#types/HttpStatusCode';
-import AllArticlesDTO from '#types/dto/articles/AllArticlesDTO';
 import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
+import AllArticlesDTO from '#types/dto/articles/AllArticlesDTO';
 import { Article } from '@prisma/client';
 import express from 'express';
 import ApiErrors, { APIError } from '~apiErrors';
-import {
-	adminRoleRequired,
-	authenticationRequired,
-	isAuthenticated,
-} from '~middlewares';
+import { isAuthenticated } from '~middlewares';
 import {
 	findArticleById,
 	findArticlesByKeywords,
 	findCountRestrictedArticles,
 } from '../database/articles';
-import useArticlesHarvest from '@composables/useArticlesHarvest';
-import { findAllFeeds } from '@database/feeds';
 
 const controller = express.Router();
 
@@ -33,18 +27,6 @@ controller.get('/', isAuthenticated, async (req, res) => {
 
 	return res.status(HttpStatusCode.OK_200).send(articlesFound);
 });
-
-// controller.post(
-// 	'/harvest',
-// 	authenticationRequired,
-// 	adminRoleRequired,
-// 	async (req, res) => {
-// 		const feeds = await findAllFeeds();
-// 		feeds.forEach((feed) => {
-// 			const
-// 		})
-// 	}
-// );
 
 controller.get('/:id', async (req, res) => {
 	const urlParams = UrlParamIdDTO.parse(req.params);
