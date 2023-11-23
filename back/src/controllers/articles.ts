@@ -1,6 +1,6 @@
 import HttpStatusCode from '#types/HttpStatusCode';
-import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
 import AllArticlesDTO from '#types/dto/articles/AllArticlesDTO';
+import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
 import { Article } from '@prisma/client';
 import express from 'express';
 import ApiErrors, { APIError } from '~apiErrors';
