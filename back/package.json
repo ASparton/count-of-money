@@ -15,6 +15,7 @@
     "express": "4.18.2",
     "express-async-errors": "^3.1.1",
     "lucia": "^2.7.4",
+    "rss-parser": "^3.13.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
