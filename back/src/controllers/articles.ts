@@ -1,6 +1,6 @@
 import HttpStatusCode from '#types/HttpStatusCode';
 import AllArticlesDTO from '#types/dto/articles/AllArticlesDTO';
-import OneArticleDTO from '#types/dto/articles/OneArticleDTO';
+import urlParamIdDTO from '#types/dto/urlParamIdDTO';
 import { Article } from '@prisma/client';
 import express from 'express';
 import ApiErrors, { APIError } from '~apiErrors';
@@ -29,7 +29,7 @@ controller.get('/', isAuthenticated, async (req, res) => {
 });
 
 controller.get('/:id', async (req, res) => {
-	const urlParams = OneArticleDTO.parse(req.params);
+	const urlParams = urlParamIdDTO.parse(req.params);
 	const article = await findArticleById(urlParams.id);
 	if (article === null) throw new APIError(ApiErrors.RESOURCE_NOT_FOUND, 404);
 	return res.status(HttpStatusCode.OK_200).send(article);

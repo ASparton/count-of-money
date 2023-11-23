@@ -53,6 +53,65 @@ describe('Feeds controller tests', () => {
 			await deleteAllUsers(database);
 		});
 	});
+
+	describe('DELETE feed by id', () => {
+		beforeAll(async () => {
+			await populateFeeds(database);
+			const res = await request(app).post('/api/users/register').send({
+				email: 'alexis.moins@epitech.eu',
+				password: 'mySecretPassword',
+				username: 'Alexis',
+			});
+			authToken = res.body.token;
+			registeredUserId = res.body.user.id;
+		});
+
+		test('DELETE feed unauthenticated', async () => {
+			const res = await request(app).delete('/api/feeds/1');
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.UNAUTHORIZED_401);
+		});
+
+		test('DELETE feed authenticated as non admin', async () => {
+			const res = await request(app)
+				.delete('/api/feeds/1')
+				.set('Authorization', `Bearer ${authToken}`);
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.FORBIDDEN_403);
+		});
+
+		test('DELETE feed authenticated as admin', async () => {
+			await setRegisteredUserAdmin(registeredUserId);
+			const res = await request(app)
+				.delete('/api/feeds/1')
+				.set('Authorization', `Bearer ${authToken}`);
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.OK_200);
+
+			const deleteFeed = await database.feed.findUnique({
+				where: {
+					id: 1,
+				},
+			});
+			expect(deleteFeed).toBeNull();
+		});
+
+		test('DELETE feed with non existing id', async () => {
+			const res = await request(app)
+				.delete('/api/feeds/0')
+				.set('Authorization', `Bearer ${authToken}`);
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.NOT_FOUND_404);
+		});
+
+		test('DELETE feed with invalid id format', async () => {
+			const res = await request(app)
+				.delete('/api/feeds/nzendiezn')
+				.set('Authorization', `Bearer ${authToken}`);
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.BAD_REQUEST_400);
+		});
+
+		afterAll(async () => {
+			await deleteAllFeeds(database);
+			await deleteAllUsers(database);
+		});
+	});
 });
 
 async function setRegisteredUserAdmin(userId: string) {
