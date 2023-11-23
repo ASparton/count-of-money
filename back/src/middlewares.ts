@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { LuciaError } from 'lucia';
 
-import ApiErrors, { APIError } from '~apiErrors';
 import HttpStatusCode from '#types/HttpStatusCode';
+import ApiErrors, { APIError } from '~apiErrors';
 
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ZodError } from 'zod';
@@ -135,7 +135,11 @@ export function errorHandler<T>(
 					.status(HttpStatusCode.NOT_FOUND_404)
 					.send(ApiErrors.RESOURCE_NOT_FOUND);
 				break;
-
+			case 'P2025':
+				res
+					.status(HttpStatusCode.NOT_FOUND_404)
+					.send(ApiErrors.RESOURCE_NOT_FOUND);
+				break;
 			default:
 				res
 					.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
