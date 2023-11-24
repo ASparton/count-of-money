@@ -1,8 +1,10 @@
-import express from 'express';
 import HttpStatusCode from '#types/HttpStatusCode';
 import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
+import CreateFeedDTO from '#types/dto/feeds/CreateFeedDTO';
 import UpdateFeedDto from '#types/dto/feeds/UpdateFeedDTO';
+import express from 'express';
 import {
+	createFeed,
 	deleteFeedById,
 	findAllFeeds,
 	updateFeedById,
@@ -12,6 +14,15 @@ const controller = express.Router();
 
 controller.get('/', async (req, res) => {
 	return res.status(HttpStatusCode.OK_200).send(await findAllFeeds());
+});
+
+controller.post('/', async (req, res) => {
+	const body = CreateFeedDTO.parse(req.body);
+	const createdFeed = await createFeed({
+		url: body.url,
+		min_articles_count: body.minArticlesCount,
+	});
+	return res.status(HttpStatusCode.CREATED_201).send(createdFeed);
 });
 
 controller.put('/:id', async (req, res) => {

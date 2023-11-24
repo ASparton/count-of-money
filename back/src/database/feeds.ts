@@ -5,6 +5,12 @@ export async function findAllFeeds(): Promise<Feed[]> {
 	return await database.feed.findMany();
 }
 
+export async function createFeed(feed: Omit<Feed, 'id'>): Promise<Feed> {
+	return await database.feed.create({
+		data: feed,
+	});
+}
+
 export async function updateFeedById(
 	feedId: number,
 	newMinArticlesCount: number,
