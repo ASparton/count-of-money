@@ -34,6 +34,7 @@ reset:
     @docker compose down --volumes
 
 test:
+    @just reset
     @docker compose up {{TEST_SERVICE}} --build
 
 update SERVICE:
