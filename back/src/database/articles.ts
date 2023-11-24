@@ -1,3 +1,4 @@
+import FeedArticle from '#types/FeedArticle';
 import { Article, Feed, Prisma } from '@prisma/client';
 import { database } from '~lucia';
 
@@ -37,6 +38,20 @@ export async function findArticleById(id: number): Promise<Article | null> {
 		where: {
 			id: id,
 		},
+	});
+}
+
+export async function createManyArticles(
+	feedId: number,
+	feedArticles: FeedArticle[],
+) {
+	return await database.article.createMany({
+		data: feedArticles.map((feedArticle) => {
+			return {
+				source_feed_id: feedId,
+				...feedArticle,
+			};
+		}),
 	});
 }
 

@@ -4,12 +4,17 @@ import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
 import { Article } from '@prisma/client';
 import express from 'express';
 import ApiErrors, { APIError } from '~apiErrors';
-import { isAuthenticated } from '~middlewares';
+import {
+	adminRoleRequired,
+	authenticationRequired,
+	isAuthenticated,
+} from '~middlewares';
 import {
 	findArticleById,
 	findArticlesByKeywords,
 	findCountRestrictedArticles,
 } from '../database/articles';
+import articlesHarvest from './articlesHarvest';
 
 const controller = express.Router();
 
@@ -34,6 +39,13 @@ controller.get('/:id', async (req, res) => {
 	if (article === null) throw new APIError(ApiErrors.RESOURCE_NOT_FOUND, 404);
 	return res.status(HttpStatusCode.OK_200).send(article);
 });
+
+controller.use(
+	'/harvest',
+	authenticationRequired,
+	adminRoleRequired,
+	articlesHarvest,
+);
 
 function getKeywordsFromQueryParam(keywordsParam: string): string[] {
 	return keywordsParam.split(';');
