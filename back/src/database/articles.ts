@@ -52,6 +52,7 @@ export async function createManyArticles(
 				...feedArticle,
 			};
 		}),
+		skipDuplicates: true,
 	});
 }
 

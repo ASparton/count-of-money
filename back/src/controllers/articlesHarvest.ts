@@ -10,14 +10,16 @@ const { parseRSSFeed } = useArticlesHarvest();
 
 controller.post('/', async (req, res) => {
 	const feeds = await findAllFeeds();
-	const createdArticles: Article[] = [];
+	const nbArticlesCreated = {
+		count: 0,
+	};
 	for (const feed of feeds) {
 		const fetchedFeedArticles = await parseRSSFeed(feed.url);
-		createManyArticles(feed.id, fetchedFeedArticles).catch((err) => {
-			console.log(err);
-		});
+		nbArticlesCreated.count += (
+			await createManyArticles(feed.id, fetchedFeedArticles)
+		).count;
 	}
-	return res.status(HttpStatusCode.CREATED_201).send(createdArticles);
+	return res.status(HttpStatusCode.CREATED_201).send(nbArticlesCreated);
 });
 
 export default controller;
