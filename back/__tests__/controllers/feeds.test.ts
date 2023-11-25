@@ -4,6 +4,7 @@ import {
 	deleteAllUsers,
 	exampleFeeds,
 	populateFeeds,
+	setRegisteredUserAdmin,
 } from 'prisma/seedingOperatons';
 import { database } from 'src/lucia';
 import request from 'supertest';
@@ -38,7 +39,7 @@ describe('Feeds controller tests', () => {
 		});
 
 		test('GET all feeds authenticated as admin', async () => {
-			await setRegisteredUserAdmin(registeredUserId);
+			await setRegisteredUserAdmin(database, registeredUserId);
 			const res = await request(app)
 				.get('/api/feeds')
 				.set('Authorization', `Bearer ${authToken}`);
@@ -86,7 +87,7 @@ describe('Feeds controller tests', () => {
 
 		test('POST feed authenticated as admin only url', async () => {
 			const expectedFeed = exampleFeeds[0];
-			await setRegisteredUserAdmin(registeredUserId);
+			await setRegisteredUserAdmin(database, registeredUserId);
 			const res = await request(app)
 				.post('/api/feeds')
 				.set('Authorization', `Bearer ${authToken}`)
@@ -113,7 +114,7 @@ describe('Feeds controller tests', () => {
 		test('POST feed authenticated as admin with url and minArticlesCount', async () => {
 			const expectedFeed = exampleFeeds[1];
 			expectedFeed.min_articles_count = 10;
-			await setRegisteredUserAdmin(registeredUserId);
+			await setRegisteredUserAdmin(database, registeredUserId);
 			const res = await request(app)
 				.post('/api/feeds')
 				.set('Authorization', `Bearer ${authToken}`)
@@ -222,7 +223,7 @@ describe('Feeds controller tests', () => {
 		test('PUT feed authenticated as admin', async () => {
 			const expectedFeed = exampleFeeds[0];
 			expectedFeed.min_articles_count = 10;
-			await setRegisteredUserAdmin(registeredUserId);
+			await setRegisteredUserAdmin(database, registeredUserId);
 			const res = await request(app)
 				.put('/api/feeds/1')
 				.set('Authorization', `Bearer ${authToken}`)
@@ -297,7 +298,7 @@ describe('Feeds controller tests', () => {
 		});
 
 		test('DELETE feed authenticated as admin', async () => {
-			await setRegisteredUserAdmin(registeredUserId);
+			await setRegisteredUserAdmin(database, registeredUserId);
 			const res = await request(app)
 				.delete('/api/feeds/1')
 				.set('Authorization', `Bearer ${authToken}`);
@@ -331,14 +332,3 @@ describe('Feeds controller tests', () => {
 		});
 	});
 });
-
-async function setRegisteredUserAdmin(userId: string) {
-	await database.user.update({
-		where: {
-			id: userId,
-		},
-		data: {
-			is_admin: true,
-		},
-	});
-}

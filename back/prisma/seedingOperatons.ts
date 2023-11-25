@@ -179,3 +179,17 @@ export async function deleteAllArticles(
 	await prismaClient.article.deleteMany();
 	console.log('Article data deleted.');
 }
+
+export async function setRegisteredUserAdmin(
+	prismaClient: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
+	userId: string
+) {
+	await prismaClient.user.update({
+		where: {
+			id: userId,
+		},
+		data: {
+			is_admin: true,
+		},
+	});
+}

@@ -1,17 +1,16 @@
 import HttpStatusCode from '#types/HttpStatusCode';
-import { Article } from '@prisma/client';
 import {
 	deleteAllFeeds,
 	deleteAllUsers,
-	exampleArticles,
-	populateArticles,
 	populateFeeds,
+	setRegisteredUserAdmin,
 } from 'prisma/seedingOperatons';
 import { database } from 'src/lucia';
 import request from 'supertest';
 import app from '../../src/app';
 
 let authToken = '';
+let registeredUserId = '';
 
 describe('Articles controller tests', () => {
 	beforeAll(async () => {
@@ -19,7 +18,7 @@ describe('Articles controller tests', () => {
 		await deleteAllFeeds(database);
 	});
 
-	describe('GET all articles', () => {
+	describe('POST articles harvest', () => {
 		beforeAll(async () => {
 			await populateFeeds(database);
 			const res = await request(app).post('/api/users/register').send({
@@ -28,20 +27,34 @@ describe('Articles controller tests', () => {
 				username: 'Alexis',
 			});
 			authToken = res.body.token;
+			registeredUserId = res.body.user.id;
 		});
 
-		test('GET all articles without keywords unauthenticated', async () => {
-			const res = await request(app).get('/api/articles');
-			expect(res.statusCode).toStrictEqual(HttpStatusCode.OK_200);
-			for (const expectedArticle of exampleArticles.filter(
-				(article) => article.id !== 5
-			)) {
-				expect(
-					(res.body as Article[]).find(
-						(receivedArticle) => receivedArticle.id === expectedArticle.id
-					)
-				).toBeTruthy();
-			}
+		test('POST articles harvest without unauthenticated', async () => {
+			const res = await request(app).post('/api/articles/harvest');
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.UNAUTHORIZED_401);
+		});
+
+		test('POST articles harvest authenticated as non admin', async () => {
+			const res = await request(app)
+				.post('/api/articles/harvest')
+				.set('Authorization', `Bearer ${authToken}`);
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.FORBIDDEN_403);
+		});
+
+		test('POST articles harvest authenticated as admin', async () => {
+			await setRegisteredUserAdmin(database, registeredUserId);
+			const res = await request(app)
+				.post('/api/articles/harvest')
+				.set('Authorization', `Bearer ${authToken}`);
+
+			// Assert response
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.CREATED_201);
+			expect(res.body.count).toBeGreaterThan(0);
+
+			// Assert database insertions
+			const nbInsertedArticles = (await database.article.count()).valueOf();
+			expect(nbInsertedArticles).toStrictEqual(res.body.count);
 		});
 
 		afterAll(async () => {
