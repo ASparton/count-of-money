@@ -1,7 +1,8 @@
 import HttpStatusCode from '#types/HttpStatusCode';
+import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
 import useArticlesHarvest from '@composables/useArticlesHarvest';
 import { createManyArticles } from '@database/articles';
-import { findAllFeeds } from '@database/feeds';
+import { findAllFeeds, findFeedById } from '@database/feeds';
 import { Article } from '@prisma/client';
 import express from 'express';
 
@@ -19,6 +20,17 @@ controller.post('/', async (req, res) => {
 			await createManyArticles(feed.id, fetchedFeedArticles)
 		).count;
 	}
+	return res.status(HttpStatusCode.CREATED_201).send(nbArticlesCreated);
+});
+
+controller.post('/:id', async (req, res) => {
+	const urlParams = UrlParamIdDTO.parse(req.params);
+	const feedToHarvestFrom = await findFeedById(urlParams.id);
+	const fetchedFeedArticles = await parseRSSFeed(feedToHarvestFrom.url);
+	const nbArticlesCreated = await createManyArticles(
+		feedToHarvestFrom.id,
+		fetchedFeedArticles,
+	);
 	return res.status(HttpStatusCode.CREATED_201).send(nbArticlesCreated);
 });
 
