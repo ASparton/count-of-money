@@ -1,5 +1,6 @@
 import { Article, Feed, Prisma, PrismaClient, User } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
+import { auth } from '~lucia';
 
 /****************/
 /* EXAMPLE DATA */
@@ -115,15 +116,29 @@ export const exampleArticles: Article[] = [
 	},
 ];
 
-export async function populateUser(
-	prismaClient: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
-) {
+export async function populateUser() {
 	console.log('Start populating User...');
 	for (const exampleUser of exampleUsers) {
-		const user = await prismaClient.user.create({
-			data: exampleUser,
+		const user = await auth.createUser({
+			key: {
+				providerId: 'email',
+				providerUserId: exampleUser.email,
+				password: "mySecuredPassword",
+			},
+			attributes: {
+				email: exampleUser.email,
+				username: exampleUser.username,
+				currency: exampleUser.currency,
+				is_admin: exampleUser.is_admin
+			},
 		});
-		console.log(`Created user with id: ${user.id} and email: ${user.email}`);
+
+		await auth.createSession({
+			userId: user.userId,
+			attributes: {},
+		});
+
+		console.log(`Created user with id: ${user.userId} and email: ${user.email}`);
 	}
 	console.log('User population finished.');
 }
