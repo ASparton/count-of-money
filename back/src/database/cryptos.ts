@@ -20,3 +20,9 @@ export async function addCryptoToUser(userId: string, cryptos: number[]) {
 		})),
 	});
 }
+
+export async function findAllVisibleCryptos() {
+	return await database.crypto.findMany({
+		where: { visible: true },
+	});
+}
