@@ -8,7 +8,7 @@ const articlesHarvestJob = new CronJob(
 		harvestFromAllFeedsAndInsert()
 			.then((nbArticlesCreated) => {
 				console.log(
-					`[JOB] Articles harvest terminated. ${nbArticlesCreated.count} articles harvested.`
+					`[JOB] Articles harvest terminated. ${nbArticlesCreated.count} articles harvested.`,
 				);
 			})
 			.catch(() => {
@@ -17,7 +17,7 @@ const articlesHarvestJob = new CronJob(
 	},
 	null, // onComplete
 	false, // start
-	'America/Los_Angeles' // timeZone
+	'America/Los_Angeles', // timeZone
 );
 
 export default articlesHarvestJob;
