@@ -69,8 +69,8 @@ model Keyword {
 model Crypto {
     id       Int          @id @default(autoincrement())
     name     String       @unique
-    logo_url String
-    api_id   String
+    logo_url String       @unique
+    api_id   String       @unique
     visible  Boolean      @default(false)
     liked_by UserCrypto[]
 }
