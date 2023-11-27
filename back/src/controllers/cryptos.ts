@@ -1,16 +1,13 @@
 import HttpStatusCode from '#types/HttpStatusCode';
 import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
-import CreateFeedDTO from '#types/dto/feeds/CreateFeedDTO';
 import UpdateFeedDto from '#types/dto/feeds/UpdateFeedDTO';
 
 import express from 'express';
 
-import {
-	createFeed,
-	deleteFeedById,
-	findAllFeeds,
-	updateFeedById,
-} from '@database/feeds';
+import CreateUpdateCryptoDto from '#types/dto/cryptos/CreateUpdateCryptoDTO';
+import { createCrypto } from '@database/cryptos';
+import { deleteFeedById, findAllFeeds, updateFeedById } from '@database/feeds';
+import { adminRoleRequired, authenticationRequired } from '~middlewares';
 
 const controller = express.Router();
 
@@ -34,14 +31,21 @@ controller.get('/:id/history/:period', async (req, res) => {
 		.send(await updateFeedById(urlParams.id, body.minArticlesCount));
 });
 
-controller.post('/', async (req, res) => {
-	const body = CreateFeedDTO.parse(req.body);
-	const createdFeed = await createFeed({
-		url: body.url,
-		min_articles_count: body.minArticlesCount,
-	});
-	return res.status(HttpStatusCode.CREATED_201).send(createdFeed);
-});
+controller.post(
+	'/',
+	authenticationRequired,
+	adminRoleRequired,
+	async (req, res) => {
+		const body = CreateUpdateCryptoDto.parse(req.body);
+		const createdCrypto = await createCrypto({
+			name: body.name,
+			api_id: body.apiId,
+			logo_url: body.logoUrl,
+			visible: body.visible,
+		});
+		return res.status(HttpStatusCode.CREATED_201).send(createdCrypto);
+	},
+);
 
 controller.delete('/:id', async (req, res) => {
 	const urlParams = UrlParamIdDTO.parse(req.params);

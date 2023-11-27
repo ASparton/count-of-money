@@ -1,4 +1,4 @@
-import { Article, Feed, Prisma, PrismaClient, User } from '@prisma/client';
+import { Article, Crypto, Feed, Prisma, PrismaClient, User } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 
 /****************/
@@ -115,6 +115,30 @@ export const exampleArticles: Article[] = [
 	},
 ];
 
+export const exampleCryptos: Crypto[] = [
+	{
+		id: 1,
+		name: 'Bitcoin',
+		api_id: 'BTC',
+		logo_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png',
+		visible: true
+	},
+	{
+		id: 2,
+		name: 'Etherum',
+		api_id: 'ETH',
+		logo_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Ethereum_logo.svg/1285px-Ethereum_logo.svg.png',
+		visible: true
+	},
+	{
+		id: 3,
+		name: 'Solana',
+		api_id: 'SOL',
+		logo_url: 'https://upload.wikimedia.org/wikipedia/en/b/b9/Solana_logo.png',
+		visible: false
+	}
+]
+
 export async function populateUser(
 	prismaClient: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
 ) {
@@ -156,6 +180,21 @@ export async function populateArticles(
 	console.log('Article population finished.');
 }
 
+export async function populateCryptos(
+	prismaClient: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
+) {
+	console.log('Start populating Crypto...');
+	for (const exampleCypto of exampleCryptos) {
+		const crypto = await prismaClient.crypto.create({
+			data: exampleCypto,
+		});
+		console.log(
+			`Created crypto with id: ${crypto.id}`
+		);
+	}
+	console.log('Crypto population finished.');
+}
+
 export async function deleteAllUsers(
 	prismaClient: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
 ) {
@@ -178,6 +217,14 @@ export async function deleteAllArticles(
 	console.log('Deleting all Article data...');
 	await prismaClient.article.deleteMany();
 	console.log('Article data deleted.');
+}
+
+export async function deleteAllCryptos(
+	prismaClient: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
+) {
+	console.log('Deleting all Crypto data...');
+	await prismaClient.crypto.deleteMany();
+	console.log('Crypto data deleted.');
 }
 
 export async function setRegisteredUserAdmin(

@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import {
 	populateArticles,
+	populateCryptos,
 	populateFeeds,
 	populateUser,
 } from './seedingOperatons';
@@ -13,6 +14,7 @@ async function main() {
 	await populateUser(prismaClient);
 	await populateFeeds(prismaClient);
 	await populateArticles(prismaClient);
+	await populateCryptos(prismaClient);
 	console.log(`Seeding finished.`);
 }
 
