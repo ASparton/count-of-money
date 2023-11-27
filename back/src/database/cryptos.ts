@@ -1,4 +1,13 @@
+import { Crypto } from '@prisma/client';
 import { database } from '~lucia';
+
+export async function createCrypto(
+	crypto: Omit<Crypto, 'id'>,
+): Promise<Crypto> {
+	return await database.crypto.create({
+		data: crypto,
+	});
+}
 
 export async function findManyCryptosById(ids: number[]) {
 	return await database.crypto.findMany({
