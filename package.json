@@ -32,9 +32,9 @@
 	"scripts": {
 		"setup": "npm i && npx husky install && chmod u+x .husky/commit-msg && chmod u+x .husky/pre-commit",
 		"lint": "npm run lint-back",
-    	"format": "npm run format-back",
-    	"lint-back": "cd back && npm run lint",
-    	"format-back": "cd back && npm run format"
+		"format": "npm run format-back",
+		"lint-back": "cd back && npm run lint",
+		"format-back": "cd back && npm run format"
 	},
 	"repository": {
 		"type": "git",
