@@ -1,4 +1,4 @@
-import articlesHarvestJob from 'jobs/articlesHarvest.job';
+import articlesHarvestJob from './jobs/articlesHarvest.job';
 import app from './app';
 
 const PORT = 3000;
