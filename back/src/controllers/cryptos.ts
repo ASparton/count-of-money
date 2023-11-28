@@ -4,8 +4,9 @@ import UpdateFeedDto from '#types/dto/feeds/UpdateFeedDTO';
 
 import express from 'express';
 
-import CreateUpdateCryptoDto from '#types/dto/cryptos/CreateUpdateCryptoDTO';
-import { createCrypto } from '@database/cryptos';
+import CreateCryptoDto from '#types/dto/cryptos/CreateCryptoDTO';
+import UpdateCryptoDto from '#types/dto/cryptos/UpdateCryptoDTO';
+import { createCrypto, updateCryptoById } from '@database/cryptos';
 import { deleteFeedById, findAllFeeds, updateFeedById } from '@database/feeds';
 import { adminRoleRequired, authenticationRequired } from '~middlewares';
 
@@ -36,7 +37,7 @@ controller.post(
 	authenticationRequired,
 	adminRoleRequired,
 	async (req, res) => {
-		const body = CreateUpdateCryptoDto.parse(req.body);
+		const body = CreateCryptoDto.parse(req.body);
 		const createdCrypto = await createCrypto({
 			name: body.name,
 			api_id: body.apiId,
@@ -44,6 +45,23 @@ controller.post(
 			visible: body.visible,
 		});
 		return res.status(HttpStatusCode.CREATED_201).send(createdCrypto);
+	},
+);
+
+controller.put(
+	'/:id',
+	authenticationRequired,
+	adminRoleRequired,
+	async (req, res) => {
+		const urlParams = UrlParamIdDTO.parse(req.params);
+		const body = UpdateCryptoDto.parse(req.body);
+		const createdCrypto = await updateCryptoById(urlParams.id, {
+			name: body.name,
+			api_id: body.apiId,
+			logo_url: body.logoUrl,
+			visible: body.visible,
+		});
+		return res.status(HttpStatusCode.OK_200).send(createdCrypto);
 	},
 );
 
