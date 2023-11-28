@@ -6,8 +6,12 @@ import express from 'express';
 
 import CreateCryptoDto from '#types/dto/cryptos/CreateCryptoDTO';
 import UpdateCryptoDto from '#types/dto/cryptos/UpdateCryptoDTO';
-import { createCrypto, updateCryptoById } from '@database/cryptos';
-import { deleteFeedById, findAllFeeds, updateFeedById } from '@database/feeds';
+import {
+	createCrypto,
+	deleteCryptoById,
+	updateCryptoById,
+} from '@database/cryptos';
+import { findAllFeeds, updateFeedById } from '@database/feeds';
 import { adminRoleRequired, authenticationRequired } from '~middlewares';
 
 const controller = express.Router();
@@ -65,11 +69,16 @@ controller.put(
 	},
 );
 
-controller.delete('/:id', async (req, res) => {
-	const urlParams = UrlParamIdDTO.parse(req.params);
-	return res
-		.status(HttpStatusCode.OK_200)
-		.send(await deleteFeedById(urlParams.id));
-});
+controller.delete(
+	'/:id',
+	authenticationRequired,
+	adminRoleRequired,
+	async (req, res) => {
+		const urlParams = UrlParamIdDTO.parse(req.params);
+		return res
+			.status(HttpStatusCode.OK_200)
+			.send(await deleteCryptoById(urlParams.id));
+	},
+);
 
 export default controller;

@@ -309,4 +309,63 @@ describe('Cryptos controller tests', () => {
 			await deleteAllUsers(database);
 		});
 	});
+
+	describe('DELETE crypto by id', () => {
+		beforeAll(async () => {
+			await populateCryptos(database);
+			const res = await request(app).post('/api/users/register').send({
+				email: 'alexis.moins@epitech.eu',
+				password: 'mySecretPassword',
+				username: 'Alexis',
+			});
+			authToken = res.body.token;
+			registeredUserId = res.body.user.id;
+		});
+
+		test('DELETE crypto unauthenticated', async () => {
+			const res = await request(app).delete('/api/cryptos/1');
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.UNAUTHORIZED_401);
+		});
+
+		test('DELETE crypto authenticated as non admin', async () => {
+			const res = await request(app)
+				.delete('/api/cryptos/1')
+				.set('Authorization', `Bearer ${authToken}`);
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.FORBIDDEN_403);
+		});
+
+		test('DELETE crypto authenticated as admin', async () => {
+			await setRegisteredUserAdmin(database, registeredUserId);
+			const res = await request(app)
+				.delete('/api/cryptos/1')
+				.set('Authorization', `Bearer ${authToken}`);
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.OK_200);
+
+			const deletedCrypto = await database.crypto.findUnique({
+				where: {
+					id: 1,
+				},
+			});
+			expect(deletedCrypto).toBeNull();
+		});
+
+		test('DELETE crypto with non existing id', async () => {
+			const res = await request(app)
+				.delete('/api/cryptos/0')
+				.set('Authorization', `Bearer ${authToken}`);
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.NOT_FOUND_404);
+		});
+
+		test('DELETE crypto with invalid id format', async () => {
+			const res = await request(app)
+				.delete('/api/cryptos/nzendiezn')
+				.set('Authorization', `Bearer ${authToken}`);
+			expect(res.statusCode).toStrictEqual(HttpStatusCode.BAD_REQUEST_400);
+		});
+
+		afterAll(async () => {
+			await deleteAllCryptos(database);
+			await deleteAllUsers(database);
+		});
+	});
 });
