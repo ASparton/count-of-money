@@ -43,6 +43,9 @@ update SERVICE:
 migrate:
     @docker compose exec {{BACKEND_SERVICE}} {{MIGRATE_COMMAND}}
 
+seed:
+    @docker compose exec {{BACKEND_SERVICE}} npx prisma db seed
+
 db:
     @docker compose exec -it {{DATABASE_SERVICE}} {{DATABASE_ACCESS_COMMAND}}
 
