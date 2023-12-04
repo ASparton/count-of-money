@@ -3,15 +3,20 @@ import HttpStatusCode from '#types/HttpStatusCode';
 import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
 import UrlQueryIdListDTO from '#types/dto/UrlQueryIdListDTO';
 
-import CreateUpdateCryptoDto from '#types/dto/cryptos/CreateUpdateCryptoDTO';
-
 import express from 'express';
 import useCrypto from '@composables/useCrypto';
 
-import { createCrypto } from '@database/cryptos';
-import { deleteFeedById } from '@database/feeds';
+import CreateCryptoDto from '#types/dto/cryptos/CreateCryptoDTO';
+import UpdateCryptoDto from '#types/dto/cryptos/UpdateCryptoDTO';
 
-import { findManyCryptosById, findAllVisibleCryptos } from '@database/cryptos';
+import {
+	createCrypto,
+	deleteCryptoById,
+	updateCryptoById,
+	findManyCryptosById,
+	findAllVisibleCryptos,
+} from '@database/cryptos';
+
 import { adminRoleRequired, authenticationRequired } from '~middlewares';
 
 const { getAllCrypto } = useCrypto();
@@ -55,7 +60,7 @@ controller.post(
 	authenticationRequired,
 	adminRoleRequired,
 	async (req, res) => {
-		const body = CreateUpdateCryptoDto.parse(req.body);
+		const body = CreateCryptoDto.parse(req.body);
 		const createdCrypto = await createCrypto({
 			name: body.name,
 			api_id: body.apiId,
@@ -66,11 +71,33 @@ controller.post(
 	},
 );
 
-controller.delete('/:id', async (req, res) => {
-	const urlParams = UrlParamIdDTO.parse(req.params);
-	return res
-		.status(HttpStatusCode.OK_200)
-		.send(await deleteFeedById(urlParams.id));
-});
+controller.put(
+	'/:id',
+	authenticationRequired,
+	adminRoleRequired,
+	async (req, res) => {
+		const urlParams = UrlParamIdDTO.parse(req.params);
+		const body = UpdateCryptoDto.parse(req.body);
+		const createdCrypto = await updateCryptoById(urlParams.id, {
+			name: body.name,
+			api_id: body.apiId,
+			logo_url: body.logoUrl,
+			visible: body.visible,
+		});
+		return res.status(HttpStatusCode.OK_200).send(createdCrypto);
+	},
+);
+
+controller.delete(
+	'/:id',
+	authenticationRequired,
+	adminRoleRequired,
+	async (req, res) => {
+		const urlParams = UrlParamIdDTO.parse(req.params);
+		return res
+			.status(HttpStatusCode.OK_200)
+			.send(await deleteCryptoById(urlParams.id));
+	},
+);
 
 export default controller;

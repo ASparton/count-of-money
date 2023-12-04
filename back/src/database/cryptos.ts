@@ -9,6 +9,26 @@ export async function createCrypto(
 	});
 }
 
+export async function updateCryptoById(
+	cryptoId: number,
+	updates: Partial<Omit<Crypto, 'id'>>,
+): Promise<Crypto> {
+	return await database.crypto.update({
+		where: {
+			id: cryptoId,
+		},
+		data: updates,
+	});
+}
+
+export async function deleteCryptoById(cryptoId: number): Promise<Crypto> {
+	return await database.crypto.delete({
+		where: {
+			id: cryptoId,
+		},
+	});
+}
+
 export async function findManyCryptosById(ids: number[]) {
 	return await database.crypto.findMany({
 		where: { id: { in: ids } },
