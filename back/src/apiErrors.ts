@@ -35,6 +35,11 @@ enum ApiErrors {
 	EMAIL_ALREADY_TAKEN = 'EMAIL_ALREADY_TAKEN',
 
 	/**
+	 * Raised when a problem occured during oauth.
+	 */
+	OAUTH_REQUEST_ERROR = 'OAUTH_REQUEST_ERROR',
+
+	/**
 	 * Raised when the user token is not valid, or the token was not given.
 	 */
 	UNAUTHORIZED = 'UNAUTHORIZED',

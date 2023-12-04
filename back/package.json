@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@lucia-auth/adapter-prisma": "^3.0.2",
+    "@lucia-auth/oauth": "^3.5.0",
     "@prisma/client": "5.6.0",
     "cors": "^2.8.5",
     "cron": "^3.1.6",

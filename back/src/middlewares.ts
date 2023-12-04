@@ -7,6 +7,7 @@ import ApiErrors, { APIError } from '~apiErrors';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ZodError } from 'zod';
 import { auth } from '~lucia';
+import { OAuthRequestError } from '@lucia-auth/oauth';
 
 /**
  * Log the incoming request on the command line.
@@ -124,6 +125,10 @@ export function errorHandler<T>(
 					.send(ApiErrors.UNEXPECTED_AUTHENTICATION_ERROR);
 				break;
 		}
+	} else if (err instanceof OAuthRequestError) {
+		res
+			.status(HttpStatusCode.BAD_REQUEST_400)
+			.send(ApiErrors.OAUTH_REQUEST_ERROR);
 	} else if (err instanceof ZodError) {
 		console.log('[error] %s', err.message);
 		res.status(HttpStatusCode.BAD_REQUEST_400).send(err.message);

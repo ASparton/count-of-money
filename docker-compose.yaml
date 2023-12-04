@@ -9,6 +9,8 @@ services:
 
     environment:
       DATABASE_URL: ${DATABASE_URL}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
 
     ports:
       - ${BACKEND_PORT}:3000
