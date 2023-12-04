@@ -1,10 +1,14 @@
 import express from 'express';
 
-import { auth } from '~lucia';
+import { auth, githubAuth } from '~lucia';
 
+import HttpStatusCode from '#types/HttpStatusCode';
+import useGithubAuth from '@composables/useGithubAuth';
 import LoginDTO from '@dto/auth/LoginDTO';
 import RegisterDTO from '@dto/auth/RegisterDTO';
-import HttpStatusCode from '#types/HttpStatusCode';
+import ApiErrors, { APIError } from '~apiErrors';
+
+const { isOAuthStateValid, getOrCreateGithubUser } = useGithubAuth();
 
 const controller = express.Router();
 
@@ -63,6 +67,45 @@ controller.post('/register', async (req, res) => {
 		},
 		token: session.sessionId,
 	});
+});
+
+controller.get('/github', async (req, res) => {
+	const [url, state] = await githubAuth.getAuthorizationUrl();
+	res.cookie('github_oauth_state', state, {
+		httpOnly: true,
+		secure: false,
+		path: '/',
+		maxAge: 60 * 60 * 1000, // 1 hour
+	});
+	return res.status(302).setHeader('Location', url.toString()).end();
+});
+
+controller.get('/github/callback', async (req, res) => {
+	if (!isOAuthStateValid(req))
+		throw new APIError(
+			ApiErrors.OAUTH_REQUEST_ERROR,
+			HttpStatusCode.BAD_REQUEST_400,
+		);
+
+	const githubCode = req.query.code as string;
+	const user = await getOrCreateGithubUser(githubCode);
+	const session = await auth.createSession({
+		userId: user.userId,
+		attributes: {},
+	});
+	return res
+		.cookie('session', session.sessionId)
+		.cookie(
+			'user',
+			JSON.stringify({
+				id: user.userId,
+				email: user.email,
+				username: user.username,
+				currency: user.currency,
+				is_admin: user.is_admin,
+			}),
+		)
+		.redirect('/api/articles');
 });
 
 export default controller;
