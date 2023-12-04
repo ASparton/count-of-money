@@ -10,8 +10,7 @@ const prismaClient = new PrismaClient();
 
 async function main() {
 	console.log(`Start seeding ...`);
-	// TODO: Real user population working with lucia
-	await populateUser(prismaClient);
+	await populateUser();
 	await populateFeeds(prismaClient);
 	await populateArticles(prismaClient);
 	await populateCryptos(prismaClient);

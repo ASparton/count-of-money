@@ -1,40 +1,95 @@
 import HttpStatusCode from '#types/HttpStatusCode';
+
 import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
-import UpdateFeedDto from '#types/dto/feeds/UpdateFeedDTO';
+import UrlQueryIdListDTO from '#types/dto/UrlQueryIdListDTO';
 
 import express from 'express';
+import useCrypto from '@composables/useCrypto';
 
 import CreateCryptoDto from '#types/dto/cryptos/CreateCryptoDTO';
 import UpdateCryptoDto from '#types/dto/cryptos/UpdateCryptoDTO';
+
 import {
 	createCrypto,
 	deleteCryptoById,
 	updateCryptoById,
+	findManyCryptosById,
+	findAllVisibleCryptos,
+	findCryptoById,
 } from '@database/cryptos';
-import { findAllFeeds, updateFeedById } from '@database/feeds';
+
 import { adminRoleRequired, authenticationRequired } from '~middlewares';
 
+const { getAllCrypto, getCrypto } = useCrypto();
 const controller = express.Router();
 
-controller.get('/', async (_, res) => {
-	return res.status(HttpStatusCode.OK_200).send(await findAllFeeds());
+controller.get('/', async (req, res) => {
+	const query = UrlQueryIdListDTO.parse(req.query);
+	const currency = req.lucia ? req.lucia.user.currency : 'EUR';
+
+	const cryptos = query.ids
+		? await findManyCryptosById(query.ids)
+		: await findAllVisibleCryptos();
+
+	const tickers: string[] = [];
+
+	const cryptoWithTicker = cryptos.map((crypto) => {
+		const ticker = `${crypto.api_id}/${currency}`;
+
+		tickers.push(ticker);
+		return { ticker, ...crypto };
+	});
+
+	if (tickers.length === 0) {
+		return res.status(HttpStatusCode.OK_200).json([]);
+	}
+
+	const apiResponse = await getAllCrypto(tickers);
+
+	const response = cryptoWithTicker.map((crypto) => {
+		const data = apiResponse[crypto.ticker];
+
+		if (!data) {
+			return;
+		}
+
+		return {
+			name: crypto.name,
+			current_price: data.last,
+			opening_price: data.open,
+			lowest_price: data.low,
+			highest_price: data.high,
+			image: crypto.logo_url,
+		};
+	});
+
+	return res.status(HttpStatusCode.OK_200).send(response);
 });
 
 controller.get('/:id', async (req, res) => {
-	const urlParams = UrlParamIdDTO.parse(req.params);
-	const body = UpdateFeedDto.parse(req.body);
-	return res
-		.status(HttpStatusCode.OK_200)
-		.send(await updateFeedById(urlParams.id, body.minArticlesCount));
+	const params = UrlParamIdDTO.parse(req.params);
+	const currency = req.lucia ? req.lucia.user.currency : 'EUR';
+
+	const crypto = await findCryptoById(params.id);
+	const apiResponse = await getCrypto(`${crypto.api_id}/${currency}`);
+
+	return res.status(HttpStatusCode.OK_200).send({
+		name: crypto.name,
+		current_price: apiResponse.last,
+		opening_price: apiResponse.open,
+		lowest_price: apiResponse.low,
+		highest_price: apiResponse.high,
+		image: crypto.logo_url,
+	});
 });
 
-controller.get('/:id/history/:period', async (req, res) => {
-	const urlParams = UrlParamIdDTO.parse(req.params);
-	const body = UpdateFeedDto.parse(req.body);
-	return res
-		.status(HttpStatusCode.OK_200)
-		.send(await updateFeedById(urlParams.id, body.minArticlesCount));
-});
+// controller.get('/:id/history/:period', async (req, res) => {
+// 	const urlParams = UrlParamIdDTO.parse(req.params);
+// 	const body = UpdateFeedDto.parse(req.body);
+// 	return res
+// 		.status(HttpStatusCode.OK_200)
+// 		.send(await updateFeedById(urlParams.id, body.minArticlesCount));
+// });
 
 controller.post(
 	'/',

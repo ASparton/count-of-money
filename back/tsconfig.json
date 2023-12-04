@@ -16,7 +16,9 @@
 		"paths": {
 			"@controllers/*": ["src/controllers/*"],
 			"@composables/*": ["src/composables/*"],
+			"@jobs/*": ["src/jobs/*"],
 			"~lucia": ["src/lucia.ts"],
+			"~app": ["src/app.ts"],
 			"~middlewares": ["src/middlewares.ts"],
 			"~apiErrors": ["src/apiErrors.ts"],
 			"#types/*": ["src/types/*"],
