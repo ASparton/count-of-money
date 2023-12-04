@@ -1,5 +1,6 @@
-import { lucia } from 'lucia';
 import { prisma } from '@lucia-auth/adapter-prisma';
+import { github } from '@lucia-auth/oauth/providers';
+import { lucia } from 'lucia';
 
 import 'lucia/polyfill/node';
 
@@ -21,6 +22,11 @@ export const auth = lucia({
 		currency: user.currency,
 		is_admin: user.is_admin,
 	}),
+});
+
+export const githubAuth = github(auth, {
+	clientId: process.env.GITHUB_CLIENT_ID ?? '',
+	clientSecret: process.env.GITHUB_CLIENT_SECRET ?? '',
 });
 
 export type Auth = typeof auth;
