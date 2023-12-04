@@ -30,13 +30,39 @@ controller.get('/', async (req, res) => {
 		? await findManyCryptosById(query.ids)
 		: await findAllVisibleCryptos();
 
-	const tickers = cryptos.map((crypto) => `${crypto.api_id}/${currency}`);
+	const tickers: string[] = [];
+
+	const cryptoWithTicker = cryptos.map((crypto) => {
+		const ticker = `${crypto.api_id}/${currency}`;
+
+		tickers.push(ticker);
+		return { ticker, ...crypto };
+	});
 
 	if (tickers.length === 0) {
 		return res.status(HttpStatusCode.OK_200).json([]);
 	}
 
-	return res.status(HttpStatusCode.OK_200).send(await getAllCrypto(tickers));
+	const apiResponse = await getAllCrypto(tickers);
+
+	const response = cryptoWithTicker.map((crypto) => {
+		const data = apiResponse[crypto.ticker];
+
+		if (!data) {
+			return;
+		}
+
+		return {
+			name: crypto.name,
+			current_price: data.last,
+			opening_price: data.open,
+			lowest_price: data.low,
+			highest_price: data.high,
+			image: crypto.logo_url,
+		};
+	});
+
+	return res.status(HttpStatusCode.OK_200).send(response);
 });
 
 // controller.get('/:id', async (req, res) => {
