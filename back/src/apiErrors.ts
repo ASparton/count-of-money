@@ -53,6 +53,11 @@ enum ApiErrors {
 	 * Raised when the resource at the given id was not found by prisma.
 	 */
 	RESOURCE_NOT_FOUND = 'RESOURCE_NOT_FOUND',
+
+	/**
+	 * Raised when the request is not in a valid format.
+	 */
+	BAD_REQUEST = 'BAD_REQUEST',
 }
 
 export class APIError extends Error {

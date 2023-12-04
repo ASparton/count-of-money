@@ -19,8 +19,9 @@ import {
 } from '@database/cryptos';
 
 import { adminRoleRequired, authenticationRequired } from '~middlewares';
+import HistoryParamDTO from '#types/dto/cryptos/HistoryParamDTO';
 
-const { getAllCrypto, getCrypto } = useCrypto();
+const { getAllCrypto, getCrypto, getHistory } = useCrypto();
 const controller = express.Router();
 
 controller.get('/', async (req, res) => {
@@ -66,7 +67,7 @@ controller.get('/', async (req, res) => {
 	return res.status(HttpStatusCode.OK_200).send(response);
 });
 
-controller.get('/:id', async (req, res) => {
+controller.get('/:id', authenticationRequired, async (req, res) => {
 	const params = UrlParamIdDTO.parse(req.params);
 	const currency = req.lucia ? req.lucia.user.currency : 'EUR';
 
@@ -83,13 +84,24 @@ controller.get('/:id', async (req, res) => {
 	});
 });
 
-// controller.get('/:id/history/:period', async (req, res) => {
-// 	const urlParams = UrlParamIdDTO.parse(req.params);
-// 	const body = UpdateFeedDto.parse(req.body);
-// 	return res
-// 		.status(HttpStatusCode.OK_200)
-// 		.send(await updateFeedById(urlParams.id, body.minArticlesCount));
-// });
+controller.get(
+	'/:id/history/:period',
+	authenticationRequired,
+	async (req, res) => {
+		const params = HistoryParamDTO.parse(req.params);
+		const currency = req.lucia ? req.lucia.user.currency : 'EUR';
+
+		const crypto = await findCryptoById(params.id);
+		const apiResponse = await getHistory(
+			`${crypto.api_id}/${currency}`,
+			params.period,
+		);
+
+		console.log(apiResponse.length);
+
+		return res.status(HttpStatusCode.OK_200).send(apiResponse);
+	},
+);
 
 controller.post(
 	'/',
