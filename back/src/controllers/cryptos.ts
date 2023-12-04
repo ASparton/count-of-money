@@ -15,11 +15,12 @@ import {
 	updateCryptoById,
 	findManyCryptosById,
 	findAllVisibleCryptos,
+	findCryptoById,
 } from '@database/cryptos';
 
 import { adminRoleRequired, authenticationRequired } from '~middlewares';
 
-const { getAllCrypto } = useCrypto();
+const { getAllCrypto, getCrypto } = useCrypto();
 const controller = express.Router();
 
 controller.get('/', async (req, res) => {
@@ -65,13 +66,22 @@ controller.get('/', async (req, res) => {
 	return res.status(HttpStatusCode.OK_200).send(response);
 });
 
-// controller.get('/:id', async (req, res) => {
-// 	const urlParams = UrlParamIdDTO.parse(req.params);
-// 	const body = UpdateFeedDto.parse(req.body);
-// 	return res
-// 		.status(HttpStatusCode.OK_200)
-// 		.send(await updateFeedById(urlParams.id, body.minArticlesCount));
-// });
+controller.get('/:id', async (req, res) => {
+	const params = UrlParamIdDTO.parse(req.params);
+	const currency = req.lucia ? req.lucia.user.currency : 'EUR';
+
+	const crypto = await findCryptoById(params.id);
+	const apiResponse = await getCrypto(`${crypto.api_id}/${currency}`);
+
+	return res.status(HttpStatusCode.OK_200).send({
+		name: crypto.name,
+		current_price: apiResponse.last,
+		opening_price: apiResponse.open,
+		lowest_price: apiResponse.low,
+		highest_price: apiResponse.high,
+		image: crypto.logo_url,
+	});
+});
 
 // controller.get('/:id/history/:period', async (req, res) => {
 // 	const urlParams = UrlParamIdDTO.parse(req.params);
