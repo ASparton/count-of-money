@@ -1,4 +1,5 @@
-import { Avatar, Button, Group, Text } from "@mantine/core";
+import { ActionIcon, Button, Group, Text } from "@mantine/core";
+import { IconLogin } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { useUser } from "../../stores/User.store";
 
@@ -8,7 +9,6 @@ const HeaderUser: React.FC = () => {
   const displayUser = () => {
     return (
       <Group>
-        <Avatar variant="transparent" radius="xl" size="md" src="" />
         <Button radius="xl" component={Link} to="/auth/user">
           <Text>{user.username}</Text>
         </Button>
@@ -18,9 +18,9 @@ const HeaderUser: React.FC = () => {
 
   const displayLoginRegister = () => {
     return (
-      <Button component={Link} to="/public/login">
-        Login/Register
-      </Button>
+      <ActionIcon component={Link} to="/public/login" size="lg">
+        <IconLogin />
+      </ActionIcon>
     );
   };
 

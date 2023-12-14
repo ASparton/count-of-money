@@ -1,32 +1,31 @@
-import { Box, Button, Container, Group } from "@mantine/core";
+import { ActionIcon, Box, Stack } from "@mantine/core";
+import { IconCurrencyBitcoin, IconHome, IconNews } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import HeaderUser from "./HeaderLogin";
 
 const NavBar: React.FC = () => {
-	return (
-		<div className="fixed top-0 left-0 w-full z-10">
-			<Container>
-				<Box bg="#1A1B1E">
-					<Group className="p-3 justify-between">
-						<div className="flex gap-4">
-							<Button radius="xl" component={Link} to={"home"}>
-								HOME
-							</Button>
-							<Button radius="xl" component={Link} to={"crypto"}>
-								CRPYTO
-							</Button>
-							<Button radius="xl" component={Link} to={"news"}>
-								NEWS
-							</Button>
-						</div>
-						<div>
-							<HeaderUser />
-						</div>
-					</Group>
-				</Box>
-			</Container>
-		</div>
-	);
+  return (
+    <div className="fixed top-0 left-0 z-10 h-full">
+      <Box bg="#0D1117" className="h-full pt-4">
+        <Stack className="h-full p-3">
+          <div>
+            <HeaderUser />
+          </div>
+          <div className="flex h-full gap-10 flex-col w-min items-center justify-center">
+            <ActionIcon radius="xl" component={Link} to={"home"} size="lg">
+              <IconHome />
+            </ActionIcon>
+            <ActionIcon radius="xl" component={Link} to={"crypto"} size="lg">
+              <IconCurrencyBitcoin />
+            </ActionIcon>
+            <ActionIcon radius="xl" component={Link} to={"news"} size={"lg"}>
+              <IconNews />
+            </ActionIcon>
+          </div>
+        </Stack>
+      </Box>
+    </div>
+  );
 };
 
 export default NavBar;
