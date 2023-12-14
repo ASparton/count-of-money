@@ -6,7 +6,7 @@ const DevTools: React.FC = () => {
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
-        <ActionIcon className="fixed m-10 z-[2000]" size="lg">
+        <ActionIcon className="fixed m-20 z-[2000] right-0 bottom-0" size="lg">
           <IconCode />
         </ActionIcon>
       </Menu.Target>
