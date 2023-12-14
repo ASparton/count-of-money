@@ -1,4 +1,4 @@
-import { Button, Menu } from "@mantine/core";
+import { ActionIcon, Menu } from "@mantine/core";
 import { IconCode, IconKey, IconKeyOff, IconMapPin } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 
@@ -6,9 +6,9 @@ const DevTools: React.FC = () => {
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
-        <Button leftSection={<IconCode />} className="fixed m-10">
-          DEV TOOLS
-        </Button>
+        <ActionIcon className="fixed m-10 z-[2000]" size="lg">
+          <IconCode />
+        </ActionIcon>
       </Menu.Target>
 
       <Menu.Dropdown>
