@@ -41,18 +41,16 @@ const NewsList: React.FC = () => {
 	};
 
 	return (
-		<Container className="my-10">
-			<Title size={80} className="mb-10">
-				News
-			</Title>
-			<div className="flex my-5 justify-center">
-				<SearchBar onChange={setSearchKeyWords} />
-			</div>
-			<Grid className="flex flex-wrap justify-center gap-6">
-				{renderNews()}
-			</Grid>
-		</Container>
-	);
+    <Container className="my-10">
+      <Title>News</Title>
+      <div className="flex my-5 justify-center">
+        <SearchBar onChange={setSearchKeyWords} />
+      </div>
+      <Grid className="flex flex-wrap justify-center gap-6">
+        {renderNews()}
+      </Grid>
+    </Container>
+  );
 };
 
 export default NewsList;
