@@ -7,7 +7,7 @@ import {
   ThemeIcon,
   Title,
 } from "@mantine/core";
-import { IconHeart, IconHeartFilled, IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconStar, IconStarFilled } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { getCryptoList } from "../../services/crypto.api";
 import { getLikedCrypto } from "../../services/user.api";
@@ -75,20 +75,21 @@ const CryptoList: React.FC<ICryptoListProps> = ({}) => {
 
   return (
     <Box>
-      <Title>Cryptocurrency Details</Title>
+      <Title>Cryptocurrency List</Title>
 
       <Group className="justify-center">
         {isPrivate && (
           <Switch
             size="lg"
+            color="gray.8"
             onLabel={
-              <ThemeIcon variant="transparent" c={"red"}>
-                <IconHeartFilled />
+              <ThemeIcon variant="transparent" c={"gold"}>
+                <IconStarFilled />
               </ThemeIcon>
             }
             offLabel={
-              <ThemeIcon variant="transparent" c={"red"}>
-                <IconHeart />
+              <ThemeIcon variant="transparent" c={"gold"}>
+                <IconStar />
               </ThemeIcon>
             }
             labelPosition="left"
@@ -121,10 +122,10 @@ const CryptoList: React.FC<ICryptoListProps> = ({}) => {
             <Table.Th>#</Table.Th>
             <Table.Th>Picture</Table.Th>
             <Table.Th>Name</Table.Th>
-            <Table.Th>Price</Table.Th>
             <Table.Th>Open price</Table.Th>
-            <Table.Th>Lowest price</Table.Th>
             <Table.Th>Highest price</Table.Th>
+            <Table.Th>Price</Table.Th>
+            <Table.Th>Lowest price</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>

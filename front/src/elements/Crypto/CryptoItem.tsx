@@ -1,9 +1,9 @@
 import { ActionIcon, Avatar, Box, Table } from "@mantine/core";
 import {
-  IconEye,
-  IconHeart,
-  IconHeartFilled,
+  IconChartAreaFilled,
   IconPremiumRights,
+  IconStar,
+  IconStarFilled,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import TradeViewChart from "react-crypto-chart";
@@ -54,14 +54,14 @@ const CryptoItem: React.FC<ICryptoItemProps> = ({
           <Table.Td className="rounded-tl-xl" {...tdProps}>
             <ActionIcon
               variant="transparent"
-              c={"red"}
+              c={"gold"}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 updateLike();
               }}
             >
-              {crypto.isLiked ? <IconHeartFilled /> : <IconHeart />}
+              {crypto.isLiked ? <IconStarFilled /> : <IconStar />}
             </ActionIcon>
             {crypto.isLiked}
           </Table.Td>
@@ -75,13 +75,13 @@ const CryptoItem: React.FC<ICryptoItemProps> = ({
           </Avatar>
         </Table.Td>
         <Table.Td {...tdProps}>{crypto.name}</Table.Td>
-        <Table.Td {...tdProps}>{"$ " + crypto.current_price}</Table.Td>
         <Table.Td {...tdProps}>{"$ " + crypto.opening_price}</Table.Td>
-        <Table.Td {...tdProps}>{"$ " + crypto.lowest_price}</Table.Td>
         <Table.Td {...tdProps}>{"$ " + crypto.highest_price}</Table.Td>
+        <Table.Td {...tdProps}>{"$ " + crypto.current_price}</Table.Td>
+        <Table.Td {...tdProps}>{"$ " + crypto.lowest_price}</Table.Td>
         <Table.Td className="rounded-tr-xl" {...tdProps}>
           <ActionIcon radius={"xl"} size={"lg"}>
-            <IconEye />
+            <IconChartAreaFilled />
           </ActionIcon>
         </Table.Td>
       </Table.Tr>
@@ -144,10 +144,3 @@ const CryptoItem: React.FC<ICryptoItemProps> = ({
 };
 
 export default CryptoItem;
-
-/**
-
-
-  
-
- */
