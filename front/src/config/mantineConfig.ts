@@ -19,9 +19,9 @@ const theme = createTheme({
 });
 
 const mantineConfig = {
-	defaultColorScheme: "dark" as MantineColorScheme,
-	theme,
-	withCssVariables: true,
+  defaultColorScheme: "dark" as MantineColorScheme,
+  theme,
+  withCssVariables: true,
 };
 
 export default mantineConfig;

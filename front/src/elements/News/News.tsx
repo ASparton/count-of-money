@@ -1,20 +1,21 @@
-import { Button, Card, Group, Image, Text } from "@mantine/core";
+import { ActionIcon, Card, Group, Image, Text } from "@mantine/core";
+import { IconPlus } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { INews } from "../../types/INews";
 import bitcoinImg from "./bitcoin.png";
 
 interface INewsProps {
-	news: INews;
+  news: INews;
 }
 
 const News: React.FC<INewsProps> = ({ news }) => {
-	return (
+  return (
     <Card
       shadow="sm"
       padding="lg"
       radius="md"
       withBorder
-      className="w-96 h-full justify-between pt-0"
+      className="h-full justify-between pt-0"
     >
       <div>
         <Card.Section>
@@ -28,25 +29,23 @@ const News: React.FC<INewsProps> = ({ news }) => {
         </Card.Section>
 
         <Group justify="space-between" mt="md" mb="xs">
-          <Text fw={500}>{news.title}</Text>
+          <Text fw={500} lineClamp={4}>
+            {news.title}
+          </Text>
         </Group>
-
-        <Text size="sm" c="dimmed">
-          {news.content}
-        </Text>
       </div>
 
       <Group justify="end">
-        <Button
+        <ActionIcon
           component={Link}
           to={news.url}
           target="_blank"
-          variant="light"
           mt="md"
-          radius="md"
+          size="lg"
+          radius={"xl"}
         >
-          Read
-        </Button>
+          <IconPlus />
+        </ActionIcon>
       </Group>
     </Card>
   );

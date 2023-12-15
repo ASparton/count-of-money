@@ -1,5 +1,5 @@
 import { ActionIcon, Box, Stack } from "@mantine/core";
-import { IconCurrencyBitcoin, IconHome, IconNews } from "@tabler/icons-react";
+import { IconCurrencyBitcoin, IconNews } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import HeaderUser from "./HeaderLogin";
 
@@ -12,9 +12,6 @@ const NavBar: React.FC = () => {
             <HeaderUser />
           </div>
           <div className="flex h-full gap-10 flex-col w-min items-center justify-center">
-            <ActionIcon radius="xl" component={Link} to={"home"} size="lg">
-              <IconHome />
-            </ActionIcon>
             <ActionIcon radius="xl" component={Link} to={"crypto"} size="lg">
               <IconCurrencyBitcoin />
             </ActionIcon>

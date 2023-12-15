@@ -34,7 +34,7 @@ const NewsList: React.FC = () => {
 
 	const renderNews = () => {
 		return news.map((news, index) => (
-      <Grid.Col span={6} key={index}>
+      <Grid.Col span={3} key={index}>
         <News news={news} />
       </Grid.Col>
     ));

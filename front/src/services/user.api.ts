@@ -28,8 +28,6 @@ export const putProfile = async (
 
 export const getLikedCrypto = async (): Promise<Response<ECryptoID[]>> => {
   return getProfile().then((res) => {
-    console.log("res", res.data, res.data.cryptos);
-
     return {
       ...res,
       data: res.data.cryptos.map((c) => c.crypto.name),

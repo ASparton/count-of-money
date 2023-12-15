@@ -8,7 +8,7 @@ const envVars = import.meta.env;
 
 function App() {
   const PUBLIC_HOME = "/public/crypto";
-  const AUTH_HOME = "/auth/home";
+  const AUTH_HOME = "/auth/crypto";
 
   return (
     <div>

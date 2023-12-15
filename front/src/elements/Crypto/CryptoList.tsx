@@ -1,6 +1,7 @@
 import {
   Box,
   Group,
+  Modal,
   MultiSelect,
   Switch,
   Table,
@@ -9,6 +10,7 @@ import {
 } from "@mantine/core";
 import { IconSearch, IconStar, IconStarFilled } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import TradeViewChart from "react-crypto-chart";
 import { getCryptoList } from "../../services/crypto.api";
 import { getLikedCrypto } from "../../services/user.api";
 import ECryptoID from "../../types/ECryptoID";
@@ -18,7 +20,9 @@ import CryptoItem from "./CryptoItem";
 interface ICryptoListProps {}
 
 const CryptoList: React.FC<ICryptoListProps> = ({}) => {
-  const [openedAccordions, setOpenedAccordions] = useState<number[]>([]);
+  const [cryptoModal, setCryptoModal] = useState<ICrypto | undefined>(
+    undefined
+  );
   const [cryptoList, setCryptoList] = useState<ICrypto[]>([]);
   const [filters, setFilters] = useState<{
     ids: ECryptoID[];
@@ -45,13 +49,11 @@ const CryptoList: React.FC<ICryptoListProps> = ({}) => {
   };
 
   const updateAccordion = (index: number) => {
-    if (openedAccordions.includes(index))
-      setOpenedAccordions((o) => o.filter((i) => i !== index));
-    else setOpenedAccordions([index]);
+    setCryptoModal(filteredCryptos[index]);
   };
 
   useEffect(() => {
-    setOpenedAccordions([]);
+    setCryptoModal(undefined);
     setFilteredCryptos(
       cryptoList.filter((c) => {
         let toShow = false;
@@ -64,10 +66,6 @@ const CryptoList: React.FC<ICryptoListProps> = ({}) => {
       })
     );
   }, [filters, cryptoList]);
-
-  useEffect(() => {
-    console.log("filteredCryptos", filteredCryptos);
-  }, [filteredCryptos]);
 
   useEffect(() => {
     loadData();
@@ -115,6 +113,70 @@ const CryptoList: React.FC<ICryptoListProps> = ({}) => {
         />
       </Group>
 
+      <Modal
+        centered
+        opened={cryptoModal !== undefined}
+        onClose={() => setCryptoModal(undefined)}
+        title={cryptoModal?.name + " chart"}
+        styles={{
+          content: {
+            minWidth: 750,
+          },
+          body: {
+            minHeight: 500,
+            padding: 0,
+          },
+        }}
+      >
+        <Box className="absolute h-[500px] w-full">
+          <TradeViewChart
+            pair={cryptoModal?.trigram + "USDT"}
+            candleStickConfig={{
+              upColor: "#00c176",
+              downColor: "#cf304a",
+              borderDownColor: "#cf304a",
+              borderUpColor: "#00c176",
+              wickDownColor: "#838ca1",
+              wickUpColor: "#838ca1",
+            }}
+            chartLayout={{
+              layout: {
+                backgroundColor: "black",
+                textColor: "white",
+              },
+              priceScale: {
+                borderColor: "#485c7b",
+              },
+              timeScale: {
+                borderColor: "#485c7b",
+                timeVisible: true,
+                secondsVisible: false,
+              },
+            }}
+            interval="5m"
+            containerStyle={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            histogramConfig={{
+              base: 0,
+              lineWidth: 2,
+              priceFormat: {
+                type: "volume",
+              },
+              overlay: true,
+              scaleMargins: {
+                top: 0.8,
+                bottom: 0,
+              },
+            }}
+          />
+        </Box>
+      </Modal>
+
       <Table highlightOnHover withRowBorders={false}>
         <Table.Thead>
           <Table.Tr>
@@ -136,7 +198,6 @@ const CryptoList: React.FC<ICryptoListProps> = ({}) => {
               index={index}
               isPrivate={isPrivate}
               onClick={updateAccordion}
-              isOpen={openedAccordions.includes(index)}
               loadData={loadData}
             />
           ))}
