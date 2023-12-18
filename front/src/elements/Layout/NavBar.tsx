@@ -1,9 +1,19 @@
 import { ActionIcon, Box, Stack } from "@mantine/core";
 import { IconCurrencyBitcoin, IconNews } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser, useUserStore } from "../../stores/User.store";
 import HeaderUser from "./HeaderLogin";
 
 const NavBar: React.FC = () => {
+  const navigate = useNavigate();
+  const userStore = useUserStore();
+  const user = useUser();
+
+  useEffect(() => {
+    console.log("update user :", user.token);
+  }, [user]);
+
   return (
     <div className="fixed top-0 left-0 z-10 h-full">
       <Box bg="#0D1117" className="h-full pt-4">
@@ -19,6 +29,19 @@ const NavBar: React.FC = () => {
               <IconNews />
             </ActionIcon>
           </div>
+          {user.token && (
+            <div>
+              <ActionIcon
+                radius={"xl"}
+                onClick={() => {
+                  navigate("/");
+                  userStore.delete();
+                }}
+              >
+                <IconNews />
+              </ActionIcon>
+            </div>
+          )}
         </Stack>
       </Box>
     </div>
