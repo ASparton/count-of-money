@@ -12,7 +12,7 @@ import { useForm } from "@mantine/form";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../services/auth.api";
 import { useUserStore } from "../stores/User.store";
-import OAuth from "./OAuthGoogle/OAuth";
+import GitHubOAuth from "./OAuthGitHub/OAuth";
 
 const envVars = import.meta.env;
 
@@ -51,7 +51,7 @@ const Register: React.FC = () => {
 
       <Divider w="100%" my={10} maw={300} label={"Use an google account"} />
 
-      <OAuth />
+      <GitHubOAuth />
 
       <Divider w="100%" my={10} maw={300} label={"Or use your account"} />
 

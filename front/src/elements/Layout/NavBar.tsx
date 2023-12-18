@@ -1,6 +1,5 @@
 import { ActionIcon, Box, Stack } from "@mantine/core";
 import { IconCurrencyBitcoin, IconNews } from "@tabler/icons-react";
-import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser, useUserStore } from "../../stores/User.store";
 import HeaderUser from "./HeaderLogin";
@@ -9,10 +8,6 @@ const NavBar: React.FC = () => {
   const navigate = useNavigate();
   const userStore = useUserStore();
   const user = useUser();
-
-  useEffect(() => {
-    console.log("update user :", user.token);
-  }, [user]);
 
   return (
     <div className="fixed top-0 left-0 z-10 h-full">

@@ -12,7 +12,7 @@ import { useForm } from "@mantine/form";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/auth.api";
 import { useUserStore } from "../stores/User.store";
-import OAuth from "./OAuthGoogle/OAuth";
+import GitHubOAuth from "./OAuthGitHub/OAuth";
 const envVars = import.meta.env;
 
 const Login: React.FC = () => {
@@ -22,8 +22,8 @@ const Login: React.FC = () => {
 
   const form = useForm({
     initialValues: {
-      email: isDevEnv ? "d@d.com" : "",
-      password: isDevEnv ? "d" : "",
+      email: isDevEnv ? "b@b.com" : "",
+      password: isDevEnv ? "b" : "",
     },
 
     validate: {
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
 
       <Divider w="100%" my={10} maw={300} label={"Use an google account"} />
 
-      <OAuth />
+      <GitHubOAuth />
 
       <Divider w="100%" my={10} maw={300} label={"Or use your account"} />
 
