@@ -46,4 +46,3 @@ export const getToken = () => {
 export const storeToken = (token: string | undefined) => {
   return localStorage.setItem("token", token ?? "");
 };
-
