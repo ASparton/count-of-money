@@ -59,7 +59,7 @@ controller.get('/', async (req, res) => {
 			current_price: data.last,
 			opening_price: data.open,
 			lowest_price: data.low,
-			highest_price: data.high,
+			highest_price: parseFloat(data.info.highPrice),
 			image: crypto.logo_url,
 		};
 	});
