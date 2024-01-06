@@ -1,5 +1,13 @@
 import ECryptoID from "./ECryptoID";
 
+export interface ICryptoLight {
+  id?: number;
+  name: string;
+  api_id: string;
+  image: string;
+  is_visible: boolean;
+}
+
 interface ICrypto {
   name: string;
   id: number;
