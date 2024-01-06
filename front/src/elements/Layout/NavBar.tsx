@@ -1,5 +1,5 @@
 import { ActionIcon, Box, Stack } from "@mantine/core";
-import { IconCurrencyBitcoin, IconNews } from "@tabler/icons-react";
+import { IconCurrencyBitcoin, IconLogout, IconNews } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser, useUserStore } from "../../stores/User.store";
 import HeaderUser from "./HeaderLogin";
@@ -33,7 +33,7 @@ const NavBar: React.FC = () => {
                   userStore.delete();
                 }}
               >
-                <IconNews />
+                <IconLogout />
               </ActionIcon>
             </div>
           )}

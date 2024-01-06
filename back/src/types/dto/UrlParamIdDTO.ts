@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const UrlParamIdDTO = z.object({
-	id: z.coerce.number(),
+  id: z.coerce.number(),
 });
 
 export default UrlParamIdDTO;

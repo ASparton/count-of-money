@@ -23,8 +23,8 @@ enum ECryptoID {
 
 export default ECryptoID;
 
-export const getCryptoName = (crypto: ECryptoID) => {
-  const valueIndex = Object.values(ECryptoID).indexOf(crypto);
+export const getCryptoName = (crypto: string) => {
+  const valueIndex = Object.keys(ECryptoID).indexOf(crypto.toUpperCase());
 
-  return Object.keys(ECryptoID)[Math.max(valueIndex, 0)];
+  return Object.values(ECryptoID)[Math.max(valueIndex, 0)];
 };

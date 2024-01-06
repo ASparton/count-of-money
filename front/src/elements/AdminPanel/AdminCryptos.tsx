@@ -49,13 +49,15 @@ const AdminCryptos: React.FC = () => {
     });
   };
 
-  const addNewCrypto = (crypto: ICryptoLight) => {
-    addCrypto({ ...crypto, logoUrl: crypto.image, apiId: crypto.api_id }).then(
-      (result) => {
-        setCryptos((old) => [...old, result.data]);
-        setModalOpened(false);
-      }
-    );
+  const addNewCrypto = (crypto: any) => {
+    addCrypto({
+      ...crypto,
+      logoUrl: crypto.logo_url,
+      apiId: crypto.api_id,
+    }).then((result) => {
+      setCryptos((old) => [...old, result.data]);
+      setModalOpened(false);
+    });
   };
   const toggleCryptoVisibility = (crypto: ICryptoLight) => {
     setVisible(crypto);
@@ -99,6 +101,8 @@ const AdminCryptos: React.FC = () => {
       </Title>
       <Stack align="center" className="my-5">
         {cryptos.map((crypto) => {
+          console.log("name", crypto.name);
+
           return (
             <Group key={crypto.id!} w="100%" className="justify-between">
               <Avatar src={crypto.image} w="10%" />
