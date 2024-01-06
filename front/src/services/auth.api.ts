@@ -13,3 +13,12 @@ export const login = async (
 ): Promise<Response<IAuthResponse>> => {
   return Fetcher.post<IAuthResponse>("users/login", params, {}, false);
 };
+
+export const github = async (
+  code: string,
+  state: string
+): Promise<Response<IAuthResponse>> => {
+  return Fetcher.get<IAuthResponse>(
+    `users/github/callback?code=${code}&state=${state}`
+  );
+};

@@ -1,56 +1,56 @@
-import HttpStatusCode from '#types/HttpStatusCode';
-import express from 'express';
+import HttpStatusCode from "#types/HttpStatusCode";
+import express from "express";
 
-import { auth } from '~lucia';
-import UpdateProfileDto from '#types/dto/auth/UpdateProfileDTO';
+import UpdateProfileDto from "#types/dto/auth/UpdateProfileDTO";
+import { auth } from "~lucia";
 
-import { findUserById, updateUser } from '@database/users';
 import {
-	addCryptoToUser,
-	findManyCryptosById,
-	removeCryptoFromUser,
-} from '@database/cryptos';
-import { addKeywordsToUser, removeKeywordsFromUser } from '@database/keywords';
+  addCryptoToUser,
+  findManyCryptosById,
+  removeCryptoFromUser,
+} from "@database/cryptos";
+import { addKeywordsToUser, removeKeywordsFromUser } from "@database/keywords";
+import { findUserById, updateUser } from "@database/users";
 
 const controller = express.Router();
 
-controller.post('/logout', async (req, res) => {
-	await auth.invalidateSession(req.lucia.sessionId);
-	res.status(HttpStatusCode.OK_200).send();
+controller.post("/logout", async (req, res) => {
+  await auth.invalidateSession(req.lucia.sessionId);
+  res.status(HttpStatusCode.OK_200).send();
 });
 
-controller.get('/profile', async (req, res) => {
-	const user = await findUserById(req.lucia.user.userId);
+controller.get("/profile", async (req, res) => {
+  const user = await findUserById(req.lucia.user.userId);
 
-	if (!user) {
-		throw new Error('lol looser');
-	}
+  if (!user) {
+    throw new Error("lol looser");
+  }
 
-	res.status(HttpStatusCode.OK_200).json({ user });
+  res.status(HttpStatusCode.OK_200).json({ user });
 });
 
-controller.put('/profile', async (req, res) => {
-	const body = UpdateProfileDto.parse(req.body);
+controller.put("/profile", async (req, res) => {
+  const body = UpdateProfileDto.parse(req.body);
 
-	const userId = req.lucia.user.userId;
+  const userId = req.lucia.user.userId;
 
-	// Ensure cryptos exist
-	await findManyCryptosById(body.cryptos);
+  // Ensure cryptos exist
+  await findManyCryptosById(body.cryptos);
 
-	// Cryptos
-	await removeCryptoFromUser(userId);
-	await addCryptoToUser(userId, body.cryptos);
+  // Cryptos
+  await removeCryptoFromUser(userId);
+  await addCryptoToUser(userId, body.cryptos);
 
-	// Keywords
-	await removeKeywordsFromUser(userId);
-	await addKeywordsToUser(userId, body.keywords);
+  // Keywords
+  await removeKeywordsFromUser(userId);
+  await addKeywordsToUser(userId, body.keywords);
 
-	const user = await updateUser(userId, {
-		username: body.username,
-		currency: body.currency,
-	});
+  const user = await updateUser(userId, {
+    username: body.username,
+    currency: body.currency,
+  });
 
-	res.status(HttpStatusCode.OK_200).json({ user });
+  res.status(HttpStatusCode.OK_200).json({ user });
 });
 
 export default controller;

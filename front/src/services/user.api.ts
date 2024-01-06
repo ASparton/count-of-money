@@ -1,4 +1,4 @@
-import ECryptoID from "../types/ECryptoID";
+import ECryptoID, { getCryptoName } from "../types/ECryptoID";
 import { IProfile } from "../types/IProfile";
 import Fetcher from "./fetcher/fetcher";
 import Response from "./fetcher/response";
@@ -30,7 +30,7 @@ export const getLikedCrypto = async (): Promise<Response<ECryptoID[]>> => {
   return getProfile().then((res) => {
     return {
       ...res,
-      data: res.data.cryptos.map((c) => c.crypto.name),
+      data: res.data.cryptos.map((c) => getCryptoName(c.crypto.name)),
     };
   });
 };

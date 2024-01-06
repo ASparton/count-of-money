@@ -1,4 +1,4 @@
-import ECryptoID, { getCryptoName } from "../types/ECryptoID";
+import { getCryptoName } from "../types/ECryptoID";
 import ICrypto, { ICryptoLight } from "../types/ICrypto";
 import { IProfile } from "../types/IProfile";
 import Fetcher from "./fetcher/fetcher";
@@ -12,9 +12,8 @@ export const getCryptoList = async (): Promise<Response<ICrypto[]>> => {
     ...res,
     data: res.data.map((o) => ({
       ...o,
-      name: getCryptoName(o.name as ECryptoID),
-      trigram: o.name as ECryptoID,
-      highest_price: 0,
+      name: o.name,
+      trigram: getCryptoName(o.name),
       isLiked: false,
     })),
   }));
@@ -57,9 +56,9 @@ export const getLightCryptoList = async (): Promise<
     ...res,
     data: res.data.map((o) => ({
       id: o.id,
-      name: getCryptoName(o.name as ECryptoID),
+      name: o.name,
       image: o.image,
-      api_id: o.name as ECryptoID,
+      api_id: getCryptoName(o.name),
       is_visible: o.is_visible,
     })),
   }));
@@ -82,4 +81,3 @@ export const setVisible = (
     visible: !crypto.is_visible,
   });
 };
-

@@ -1,7 +1,7 @@
-import HttpStatusCode from '#types/HttpStatusCode';
-import ApiErrors, { APIError } from '~apiErrors';
+import HttpStatusCode from "#types/HttpStatusCode";
+import ApiErrors, { APIError } from "~apiErrors";
 
-import { binance } from 'ccxt';
+import { binance } from "ccxt";
 const _exchange = new binance();
 
 /**
@@ -12,19 +12,19 @@ const _exchange = new binance();
  * @returns a tuple of string and number
  */
 function _getPeriodAndLimit(period: string): [string, number] {
-	switch (period) {
-		case 'daily':
-			return ['1d', 60];
+  switch (period) {
+    case "daily":
+      return ["1d", 60];
 
-		case 'hourly':
-			return ['1h', 48];
+    case "hourly":
+      return ["1h", 48];
 
-		case 'minute':
-			return ['1m', 120];
+    case "minute":
+      return ["1m", 120];
 
-		default:
-			throw new APIError(ApiErrors.BAD_REQUEST, HttpStatusCode.BAD_REQUEST_400);
-	}
+    default:
+      throw new APIError(ApiErrors.BAD_REQUEST, HttpStatusCode.BAD_REQUEST_400);
+  }
 }
 
 /**
@@ -35,7 +35,7 @@ function _getPeriodAndLimit(period: string): [string, number] {
  * @returns a Promise of Ticker array
  */
 async function getAllCrypto(symbols: string[]) {
-	return await _exchange.fetchTickers(symbols);
+  return await _exchange.fetchTickers(symbols);
 }
 
 /**
@@ -46,7 +46,7 @@ async function getAllCrypto(symbols: string[]) {
  * @returns a Promise of Ticker
  */
 async function getCrypto(symbol: string) {
-	return await _exchange.fetchTicker(symbol);
+  return await _exchange.fetchTicker(symbol);
 }
 
 /**
@@ -58,14 +58,14 @@ async function getCrypto(symbol: string) {
  * @returns a Promise of an OHLCV array
  */
 async function getHistory(symbol: string, period: string) {
-	const [_period, limit] = _getPeriodAndLimit(period);
-	return await _exchange.fetchOHLCV(symbol, _period, undefined, limit);
+  const [_period, limit] = _getPeriodAndLimit(period);
+  return await _exchange.fetchOHLCV(symbol, _period, undefined, limit);
 }
 
 const useCrypto = () => ({
-	getAllCrypto,
-	getCrypto,
-	getHistory,
+  getAllCrypto,
+  getCrypto,
+  getHistory,
 });
 
 export default useCrypto;

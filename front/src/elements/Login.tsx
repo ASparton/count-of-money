@@ -12,7 +12,7 @@ import { useForm } from "@mantine/form";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/auth.api";
 import { useUserStore } from "../stores/User.store";
-import GitHubOAuth from "./OAuthGitHub/OAuth";
+import OAuth from "./OAuthGitHub/OAuth";
 const envVars = import.meta.env;
 
 const Login: React.FC = () => {
@@ -43,9 +43,9 @@ const Login: React.FC = () => {
       <Title order={1}>Access to your dashboard</Title>
       <Title order={4}>Please Log In</Title>
 
-      <Divider w="100%" my={10} maw={300} label={"Use an google account"} />
+      <Divider w="100%" my={10} maw={300} label={"Use an github account"} />
 
-      <GitHubOAuth />
+      <OAuth />
 
       <Divider w="100%" my={10} maw={300} label={"Or use your account"} />
 

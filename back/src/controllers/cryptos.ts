@@ -1,13 +1,13 @@
-import HttpStatusCode from '#types/HttpStatusCode';
+import HttpStatusCode from "#types/HttpStatusCode";
 
-import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
-import UrlQueryIdListDTO from '#types/dto/UrlQueryIdListDTO';
+import UrlParamIdDTO from "#types/dto/UrlParamIdDTO";
+import UrlQueryIdListDTO from "#types/dto/UrlQueryIdListDTO";
 
 import useCrypto from "@composables/useCrypto";
 import express from "express";
 
-import CreateCryptoDto from '#types/dto/cryptos/CreateCryptoDTO';
-import UpdateCryptoDto from '#types/dto/cryptos/UpdateCryptoDTO';
+import CreateCryptoDto from "#types/dto/cryptos/CreateCryptoDTO";
+import UpdateCryptoDto from "#types/dto/cryptos/UpdateCryptoDTO";
 
 import {
   createCrypto,
@@ -181,15 +181,15 @@ controller.put(
 );
 
 controller.delete(
-	'/:id',
-	authenticationRequired,
-	adminRoleRequired,
-	async (req, res) => {
-		const urlParams = UrlParamIdDTO.parse(req.params);
-		return res
-			.status(HttpStatusCode.OK_200)
-			.send(await deleteCryptoById(urlParams.id));
-	},
+  "/:id",
+  authenticationRequired,
+  adminRoleRequired,
+  async (req, res) => {
+    const urlParams = UrlParamIdDTO.parse(req.params);
+    return res
+      .status(HttpStatusCode.OK_200)
+      .send(await deleteCryptoById(urlParams.id));
+  }
 );
 
 export default controller;
