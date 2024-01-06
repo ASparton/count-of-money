@@ -27,12 +27,13 @@ controller.post('/login', async (req, res) => {
 	});
 
 	return res.status(HttpStatusCode.OK_200).send({
-		user: {
-			id: key.userId,
-			email: body.data.email,
-		},
-		token: session.sessionId,
-	});
+    user: {
+      id: key.userId,
+      email: body.data.email,
+      is_admin: session.user.is_admin,
+    },
+    token: session.sessionId,
+  });
 });
 
 controller.post('/register', async (req, res) => {
