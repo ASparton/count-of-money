@@ -10,10 +10,13 @@ import {
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { getKeywords, setKeywords } from "../services/user.api";
+import { useUser } from "../stores/User.store";
+import AdminPanel from "./AdminPanel/AdminPanel";
 import SearchBar from "./News/SearchBar";
 
 const UserAccess: React.FC = () => {
   const [newsKeyWords, setNewsKeyWords] = useState<string[]>([]);
+  const user = useUser();
 
   useEffect(() => {
     getKeywords().then((res) => setNewsKeyWords(res.data));
@@ -100,6 +103,7 @@ const UserAccess: React.FC = () => {
           </div>
         </div>
       </div>
+      {user.isAdmin && <AdminPanel />}
     </Stack>
   );
 };
