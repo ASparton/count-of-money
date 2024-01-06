@@ -61,3 +61,7 @@ export async function findAllVisibleCryptos() {
 		where: { visible: true },
 	});
 }
+
+export async function findAllCryptos() {
+  return await database.crypto.findMany({});
+}
