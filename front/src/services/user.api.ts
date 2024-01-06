@@ -38,7 +38,7 @@ export const getLikedCrypto = async (): Promise<Response<ECryptoID[]>> => {
 export const getKeywords = async (): Promise<Response<string[]>> => {
   return getProfile().then((res) => ({
     ...res,
-    data: res.data.keywords.map((k) => k.value),
+    data: res.data.keywords.map((k) => k.name),
   }));
 };
 

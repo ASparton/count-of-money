@@ -10,7 +10,7 @@ interface ICrypto {
   lowest_price: number;
   highest_price: number;
 
-  logo_url: string;
+  image: string;
   isLiked: boolean;
 }
 

@@ -3,23 +3,23 @@ import HttpStatusCode from '#types/HttpStatusCode';
 import UrlParamIdDTO from '#types/dto/UrlParamIdDTO';
 import UrlQueryIdListDTO from '#types/dto/UrlQueryIdListDTO';
 
-import express from 'express';
-import useCrypto from '@composables/useCrypto';
+import useCrypto from "@composables/useCrypto";
+import express from "express";
 
 import CreateCryptoDto from '#types/dto/cryptos/CreateCryptoDTO';
 import UpdateCryptoDto from '#types/dto/cryptos/UpdateCryptoDTO';
 
 import {
-	createCrypto,
-	deleteCryptoById,
-	updateCryptoById,
-	findManyCryptosById,
-	findAllVisibleCryptos,
-	findCryptoById,
-} from '@database/cryptos';
+  createCrypto,
+  deleteCryptoById,
+  findAllVisibleCryptos,
+  findCryptoById,
+  findManyCryptosById,
+  updateCryptoById,
+} from "@database/cryptos";
 
-import { adminRoleRequired, authenticationRequired } from '~middlewares';
-import HistoryParamDTO from '#types/dto/cryptos/HistoryParamDTO';
+import HistoryParamDTO from "#types/dto/cryptos/HistoryParamDTO";
+import { adminRoleRequired, authenticationRequired } from "~middlewares";
 
 const { getAllCrypto, getCrypto, getHistory } = useCrypto();
 const controller = express.Router();
@@ -55,13 +55,14 @@ controller.get('/', async (req, res) => {
 		}
 
 		return {
-			name: crypto.name,
-			current_price: data.last,
-			opening_price: data.open,
-			lowest_price: data.low,
-			highest_price: data.high,
-			image: crypto.logo_url,
-		};
+      id: crypto.id,
+      name: crypto.name,
+      current_price: data.last,
+      opening_price: data.open,
+      lowest_price: data.low,
+      highest_price: data.high,
+      image: crypto.logo_url,
+    };
 	});
 
 	return res.status(HttpStatusCode.OK_200).send(response);

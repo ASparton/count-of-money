@@ -14,7 +14,7 @@ export interface _ICrypto {
 
 export interface _IKeywords {
   id: number;
-  value: string;
+  name: string;
   user_id: string;
 }
 

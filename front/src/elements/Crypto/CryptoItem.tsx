@@ -54,7 +54,7 @@ const CryptoItem: React.FC<ICryptoItemProps> = ({
           {index + 1}
         </Table.Td>
         <Table.Td>
-          <Avatar src={crypto.logo_url}>
+          <Avatar src={crypto.image}>
             <IconPremiumRights />
           </Avatar>
         </Table.Td>
