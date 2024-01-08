@@ -110,9 +110,20 @@ controller.get("/github/callback", async (req, res) => {
     };
 
     const user = await getUser();
-    auth.createSession({
+    const session = await auth.createSession({
       userId: user.userId,
       attributes: {},
+    });
+
+    return res.status(HttpStatusCode.OK_200).send({
+      user: {
+        id: user.userId,
+        email: user.email,
+        username: user.username,
+        currency: user.currency,
+        is_admin: user.is_admin,
+      },
+      token: session.sessionId,
     });
   } catch (e) {
     if (e instanceof OAuthRequestError) {
